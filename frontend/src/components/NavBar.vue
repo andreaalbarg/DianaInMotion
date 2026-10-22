@@ -8,8 +8,7 @@ function scrollTo(id: string) {
   <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <img src="/logo-diana-in-motion.png" alt="Diana in Motion" class="h-7 w-auto" />
-        <span class="text-gray-400 font-mono text-[10px] uppercase tracking-widest hidden sm:block">Live Training Series</span>
+        <img src="/logo-diana-in-motion.png" alt="Diana in Motion" class="h-9 w-auto" />
       </div>
 
       <nav class="hidden md:flex items-center gap-8 text-sm text-gray-500">
