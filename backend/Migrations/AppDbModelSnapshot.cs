@@ -43,6 +43,9 @@ namespace dianainmotion.Backend.Migrations
                     b.Property<string>("Speaker")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SpeakerPhotoUrl")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");

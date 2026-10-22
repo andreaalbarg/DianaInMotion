@@ -8,6 +8,7 @@ public record EventDto
     public string Category { get; init; } = "";
     public DateTime ScheduledAt { get; init; }
     public string? Speaker { get; init; }
+    public string? SpeakerPhotoUrl { get; init; }
     public string? RecordingUrl { get; init; }
     public bool IsPast { get; init; }
     public int RegistrationCount { get; init; }

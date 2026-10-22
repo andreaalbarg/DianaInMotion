@@ -8,6 +8,7 @@ public class Event
     public string Category { get; set; } = "basics"; // "basics" | "advanced"
     public DateTime ScheduledAt { get; set; }
     public string? Speaker { get; set; }
+    public string? SpeakerPhotoUrl { get; set; }
     public string? RecordingUrl { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

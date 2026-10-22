@@ -28,6 +28,7 @@ public class EventsController : ControllerBase
                 Category = e.Category,
                 ScheduledAt = e.ScheduledAt,
                 Speaker = e.Speaker,
+                SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
                 IsPast = false,
                 RegistrationCount = e.Registrations.Count()
@@ -51,6 +52,7 @@ public class EventsController : ControllerBase
                 Category = e.Category,
                 ScheduledAt = e.ScheduledAt,
                 Speaker = e.Speaker,
+                SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
                 IsPast = true,
                 RegistrationCount = e.Registrations.Count()

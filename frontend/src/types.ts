@@ -5,6 +5,7 @@ export interface Event {
   category: 'basics' | 'advanced'
   scheduledAt: string
   speaker: string | null
+  speakerPhotoUrl: string | null
   recordingUrl: string | null
   isPast: boolean
   registrationCount: number
