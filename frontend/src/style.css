@@ -70,7 +70,7 @@ body {
 }
 
 .text-live::before {
-  content: 'live.';
+  content: 'LIVE.';
   position: absolute;
   left: 0.08em;
   top: 0.06em;
