@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "components": [
+    {
+      "id": "api",
+      "name": "API",
+      "kind": "dotnetBackend",
+      "path": "backend",
+      "order": 0,
+      "deps": []
+    },
+    {
+      "id": "web",
+      "name": "Web",
+      "kind": "viteFrontend",
+      "path": "frontend",
+      "order": 1,
+      "deps": [
+        "api"
+      ]
+    }
+  ],
+  "excludedPaths": []
+}

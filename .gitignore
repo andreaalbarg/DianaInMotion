@@ -1,0 +1,28 @@
+## .NET
+bin/
+obj/
+*.user
+
+## Node
+node_modules/
+dist/
+.vite/
+
+## IDE
+.vs/
+.idea/
+.vscode/
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Secrets — keep credentials out of git (use env vars; commit only .env.example)
+.env
+.env.*
+!.env.example
+appsettings.*.Local.json
+secrets.json
+
+## Diana
+.diana/cache/
