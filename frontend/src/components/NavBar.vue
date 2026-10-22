@@ -13,7 +13,6 @@ function scrollTo(id: string) {
 
       <nav class="hidden md:flex items-center gap-8 text-sm text-gray-500">
         <button @click="scrollTo('upcoming')" class="hover:text-[#231f20] transition-colors">Upcoming</button>
-        <button @click="scrollTo('schedule')" class="hover:text-[#231f20] transition-colors">Schedule</button>
         <button @click="scrollTo('ondemand')" class="hover:text-[#231f20] transition-colors">On Demand</button>
       </nav>
 

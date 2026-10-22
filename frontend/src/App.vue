@@ -108,7 +108,7 @@ function scrollToSection(id: string) {
       </div>
     </section>
 
-    <!-- Upcoming Sessions -->
+    <!-- Upcoming Sessions + Full Schedule -->
     <section id="upcoming" class="bg-gray-50 border-b border-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div class="section-tag">
@@ -124,49 +124,44 @@ function scrollToSection(id: string) {
           </div>
         </div>
 
-        <div v-if="loadingUpcoming" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div v-for="i in 3" :key="i" class="border border-gray-200 p-6 h-56 animate-pulse bg-gray-100" />
-        </div>
+        <!-- Loading state -->
+        <template v-if="loadingUpcoming">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+            <div v-for="i in 3" :key="i" class="border border-gray-200 p-6 h-56 animate-pulse bg-gray-100" />
+          </div>
+          <div class="space-y-6">
+            <div v-for="i in 2" :key="i" class="border border-gray-200 h-48 animate-pulse bg-gray-100" />
+          </div>
+        </template>
 
+        <!-- Empty state -->
         <div v-else-if="upcomingEvents.length === 0" class="border border-gray-200 p-12 text-center">
           <p class="text-xs font-mono uppercase tracking-widest text-gray-400">No sessions scheduled right now — check back soon.</p>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <EventCard
-            v-for="event in upcomingEvents"
-            :key="event.id"
-            :event="event"
-            :on-register="() => openModal(event)"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Full Schedule / Calendar -->
-    <section id="schedule" class="border-b border-gray-100">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-        <div class="section-tag">
-          <span class="tag-num">03</span>
-          <span class="tag-label">Full schedule</span>
-          <span class="tag-rule"></span>
-        </div>
-
-        <div class="flex items-end justify-between gap-6 mb-10">
-          <div>
-            <h2 class="text-4xl sm:text-5xl font-black text-[#231f20] leading-tight mb-3">All upcoming dates</h2>
-            <p class="text-gray-500 leading-relaxed max-w-md">Every session on the calendar. Pick the ones that work for you.</p>
+        <!-- Cards -->
+        <template v-else>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+            <EventCard
+              v-for="event in upcomingEvents"
+              :key="event.id"
+              :event="event"
+              :on-register="() => openModal(event)"
+            />
           </div>
-        </div>
 
-        <div v-if="loadingUpcoming" class="space-y-6">
-          <div v-for="i in 2" :key="i" class="border border-gray-200 h-48 animate-pulse bg-gray-100" />
-        </div>
-        <CalendarSchedule
-          v-else-if="upcomingEvents.length > 0"
-          :events="upcomingEvents"
-          :on-register="openModal"
-        />
+          <!-- Divider -->
+          <div class="flex items-center gap-4 mb-12">
+            <span class="text-xs font-mono uppercase tracking-widest text-gray-400">Full schedule</span>
+            <div class="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          <!-- Calendar -->
+          <CalendarSchedule
+            :events="upcomingEvents"
+            :on-register="openModal"
+          />
+        </template>
       </div>
     </section>
 
@@ -174,7 +169,7 @@ function scrollToSection(id: string) {
     <section id="ondemand" class="border-b border-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div class="section-tag">
-          <span class="tag-num">04</span>
+          <span class="tag-num">03</span>
           <span class="tag-label">On Demand</span>
           <span class="tag-rule"></span>
         </div>
@@ -208,7 +203,7 @@ function scrollToSection(id: string) {
     <section class="bg-[#231f20] py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="section-tag">
-          <span class="tag-num" style="background:#fff;color:#231f20">05</span>
+          <span class="tag-num" style="background:#fff;color:#231f20">04</span>
           <span class="tag-label" style="color:#666">Get started</span>
           <span class="tag-rule" style="background:#333"></span>
         </div>
