@@ -46,8 +46,8 @@ function scrollToSection(id: string) {
     <NavBar />
 
     <!-- Hero -->
-    <section class="pt-14">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-14 pb-16 border-b border-gray-100">
+    <section class="pt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-16 border-b border-gray-100">
         <div class="section-tag">
           <span class="tag-num">01</span>
           <span class="tag-label">In Motion / Live Training</span>
