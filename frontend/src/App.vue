@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import NavBar from './components/NavBar.vue'
 import EventCard from './components/EventCard.vue'
+import CalendarSchedule from './components/CalendarSchedule.vue'
 import RegistrationModal from './components/RegistrationModal.vue'
 import { fetchUpcomingEvents, fetchPastEvents } from './services/api'
 import type { Event } from './types'
@@ -142,11 +143,38 @@ function scrollToSection(id: string) {
       </div>
     </section>
 
+    <!-- Full Schedule / Calendar -->
+    <section id="schedule" class="border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div class="section-tag">
+          <span class="tag-num">03</span>
+          <span class="tag-label">Full schedule</span>
+          <span class="tag-rule"></span>
+        </div>
+
+        <div class="flex items-end justify-between gap-6 mb-10">
+          <div>
+            <h2 class="text-4xl sm:text-5xl font-black text-[#231f20] leading-tight mb-3">All upcoming dates</h2>
+            <p class="text-gray-500 leading-relaxed max-w-md">Every session on the calendar. Pick the ones that work for you.</p>
+          </div>
+        </div>
+
+        <div v-if="loadingUpcoming" class="space-y-6">
+          <div v-for="i in 2" :key="i" class="border border-gray-200 h-48 animate-pulse bg-gray-100" />
+        </div>
+        <CalendarSchedule
+          v-else-if="upcomingEvents.length > 0"
+          :events="upcomingEvents"
+          :on-register="openModal"
+        />
+      </div>
+    </section>
+
     <!-- On Demand -->
     <section id="ondemand" class="border-b border-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div class="section-tag">
-          <span class="tag-num">03</span>
+          <span class="tag-num">04</span>
           <span class="tag-label">On Demand</span>
           <span class="tag-rule"></span>
         </div>
@@ -180,7 +208,7 @@ function scrollToSection(id: string) {
     <section class="bg-[#231f20] py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="section-tag">
-          <span class="tag-num" style="background:#fff;color:#231f20">04</span>
+          <span class="tag-num" style="background:#fff;color:#231f20">05</span>
           <span class="tag-label" style="color:#666">Get started</span>
           <span class="tag-rule" style="background:#333"></span>
         </div>
