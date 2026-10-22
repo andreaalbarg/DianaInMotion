@@ -92,7 +92,7 @@ function formatDate(iso: string) {
 
       <template v-else>
         <div class="text-center py-6">
-          <div class="w-12 h-12 bg-[#A8FF00] flex items-center justify-center mx-auto mb-5">
+          <div class="w-12 h-12 bg-[#c2f33d] flex items-center justify-center mx-auto mb-5">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
               <polyline points="20 6 9 17 4 12"/>
             </svg>

@@ -24,7 +24,7 @@ function daysUntil(iso: string) {
       <p class="text-xs font-mono uppercase tracking-widest text-gray-400">
         {{ event.category === 'basics' ? 'Basics' : 'Advanced' }}
       </p>
-      <span v-if="!event.isPast && daysUntil(event.scheduledAt) <= 14" class="text-xs font-mono text-[#A8FF00] bg-gray-900 px-2 py-0.5">
+      <span v-if="!event.isPast && daysUntil(event.scheduledAt) <= 14" class="text-xs font-mono text-[#c2f33d] bg-gray-900 px-2 py-0.5">
         In {{ daysUntil(event.scheduledAt) }}d
       </span>
     </div>

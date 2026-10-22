@@ -57,12 +57,12 @@ function scrollToSection(id: string) {
         <div class="grid md:grid-cols-2 gap-0 items-start">
           <div class="pr-0 md:pr-16">
             <div class="flex items-center gap-2 mb-8">
-              <span class="w-2 h-2 bg-[#A8FF00] block"></span>
+              <span class="w-2 h-2 bg-[#c2f33d] block"></span>
               <span class="text-xs font-mono uppercase tracking-widest text-gray-400">Live every week</span>
             </div>
 
             <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-none tracking-tight mb-10 whitespace-pre-line">
-              Learn to build<br/>with Diana,<br/><span style="color:#A8FF00">live.</span>
+              Learn to build<br/>with Diana,<br/><span style="color:#c2f33d">live.</span>
             </h1>
 
             <p class="text-lg text-gray-500 leading-relaxed mb-10 max-w-md">
@@ -212,7 +212,7 @@ function scrollToSection(id: string) {
     <footer class="bg-gray-900 border-t border-gray-800 py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <div class="w-6 h-6 bg-[#A8FF00] flex items-center justify-center">
+          <div class="w-6 h-6 bg-[#c2f33d] flex items-center justify-center">
             <svg width="12" height="12" viewBox="0 0 18 18" fill="none">
               <rect x="2" y="3" width="2.5" height="12" fill="#111"/>
               <rect x="5.5" y="3" width="2.5" height="12" fill="#111"/>

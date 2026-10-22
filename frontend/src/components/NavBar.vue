@@ -8,7 +8,7 @@ function scrollTo(id: string) {
   <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-7 h-7 bg-[#A8FF00] flex items-center justify-center flex-shrink-0">
+        <div class="w-7 h-7 bg-[#c2f33d] flex items-center justify-center flex-shrink-0">
           <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
             <rect x="2" y="3" width="2.5" height="12" rx="0" fill="#111"/>
             <rect x="5.5" y="3" width="2.5" height="12" rx="0" fill="#111"/>
