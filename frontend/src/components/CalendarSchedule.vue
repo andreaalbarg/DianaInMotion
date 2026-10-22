@@ -145,8 +145,9 @@ function formatTime(iso: string) {
                   <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-1">
                     {{ event.category === 'basics' ? 'Basics' : 'Advanced' }} · {{ formatTime(event.scheduledAt) }} UTC
                   </p>
-                  <h4 class="text-base font-black text-[#231f20] leading-tight">{{ event.title }}</h4>
-                  <p v-if="event.speaker" class="text-xs text-gray-400 font-mono mt-1">{{ event.speaker }}</p>
+                  <h4 class="text-base font-black text-[#231f20] leading-tight mb-1">{{ event.title }}</h4>
+                  <p class="text-sm text-gray-500 leading-relaxed mb-2">{{ event.description }}</p>
+                  <p class="text-xs text-gray-400 font-mono">{{ event.registrationCount }} registered</p>
                 </div>
               </div>
             </div>

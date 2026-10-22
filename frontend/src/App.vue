@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import NavBar from './components/NavBar.vue'
-import EventCard from './components/EventCard.vue'
 import CalendarSchedule from './components/CalendarSchedule.vue'
 import RegistrationModal from './components/RegistrationModal.vue'
 import { fetchUpcomingEvents, fetchPastEvents } from './services/api'
@@ -124,44 +123,19 @@ function scrollToSection(id: string) {
           </div>
         </div>
 
-        <!-- Loading state -->
-        <template v-if="loadingUpcoming">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-            <div v-for="i in 3" :key="i" class="border border-gray-200 p-6 h-56 animate-pulse bg-gray-100" />
-          </div>
-          <div class="space-y-6">
-            <div v-for="i in 2" :key="i" class="border border-gray-200 h-48 animate-pulse bg-gray-100" />
-          </div>
-        </template>
+        <div v-if="loadingUpcoming" class="space-y-6">
+          <div v-for="i in 3" :key="i" class="border border-gray-200 h-36 animate-pulse bg-gray-100" />
+        </div>
 
-        <!-- Empty state -->
         <div v-else-if="upcomingEvents.length === 0" class="border border-gray-200 p-12 text-center">
           <p class="text-xs font-mono uppercase tracking-widest text-gray-400">No sessions scheduled right now — check back soon.</p>
         </div>
 
-        <!-- Cards -->
-        <template v-else>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-            <EventCard
-              v-for="event in upcomingEvents"
-              :key="event.id"
-              :event="event"
-              :on-register="() => openModal(event)"
-            />
-          </div>
-
-          <!-- Divider -->
-          <div class="flex items-center gap-4 mb-12">
-            <span class="text-xs font-mono uppercase tracking-widest text-gray-400">Full schedule</span>
-            <div class="flex-1 h-px bg-gray-200"></div>
-          </div>
-
-          <!-- Calendar -->
-          <CalendarSchedule
-            :events="upcomingEvents"
-            :on-register="openModal"
-          />
-        </template>
+        <CalendarSchedule
+          v-else
+          :events="upcomingEvents"
+          :on-register="openModal"
+        />
       </div>
     </section>
 
