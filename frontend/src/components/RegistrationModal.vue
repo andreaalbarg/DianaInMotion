@@ -14,7 +14,7 @@ const success = ref(false)
 
 async function submit() {
   if (!name.value.trim() || !email.value.trim()) {
-    error.value = 'Por favor completa todos los campos.'
+    error.value = 'Please fill in all fields.'
     return
   }
   loading.value = true
@@ -24,89 +24,86 @@ async function submit() {
     success.value = true
     emit('registered')
   } catch (e: any) {
-    error.value = e.response?.data?.message ?? 'Ocurrió un error. Intenta de nuevo.'
+    error.value = e.response?.data?.message ?? 'Something went wrong. Please try again.'
   } finally {
     loading.value = false
   }
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('es-MX', {
+  return new Date(iso).toLocaleDateString('en-US', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     hour: '2-digit', minute: '2-digit', timeZone: 'UTC'
-  })
+  }) + ' UTC'
 }
 </script>
 
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="emit('close')" />
+    <div class="absolute inset-0 bg-black/50" @click="emit('close')" />
 
-    <div class="relative w-full max-w-md bg-[#151719] border border-[#2A2D35] rounded-2xl p-6 shadow-2xl">
-      <button @click="emit('close')" class="absolute top-4 right-4 text-[#6B7280] hover:text-white transition-colors">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+    <div class="relative w-full max-w-md bg-white border border-gray-200 p-8 shadow-xl">
+      <button @click="emit('close')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
           <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/>
         </svg>
       </button>
 
       <template v-if="!success">
-        <div class="mb-5">
-          <span
-            class="text-xs font-semibold px-2 py-1 rounded-full"
-            :class="event.category === 'basics' ? 'bg-emerald-900/50 text-emerald-400' : 'bg-purple-900/50 text-purple-400'"
-          >
+        <div class="mb-6">
+          <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-3">
             {{ event.category === 'basics' ? 'In Motion / Basics' : 'In Motion / Advanced' }}
-          </span>
-          <h2 class="text-white font-bold text-xl mt-3 mb-1">{{ event.title }}</h2>
-          <p class="text-[#6B7280] text-sm">{{ formatDate(event.scheduledAt) }}</p>
+          </p>
+          <h2 class="text-2xl font-black text-gray-900 leading-tight mb-2">{{ event.title }}</h2>
+          <p class="text-sm text-gray-500 font-mono">{{ formatDate(event.scheduledAt) }}</p>
         </div>
 
         <form @submit.prevent="submit" class="space-y-4">
           <div>
-            <label class="block text-[#9CA3AF] text-sm mb-1.5">Nombre completo</label>
+            <label class="block text-xs font-mono uppercase tracking-widest text-gray-400 mb-2">Full name</label>
             <input
               v-model="name"
               type="text"
-              placeholder="Tu nombre"
-              class="w-full bg-[#0B0C0E] border border-[#2A2D35] rounded-lg px-4 py-2.5 text-white placeholder-[#4B5563] text-sm focus:outline-none focus:border-[#A8FF00] transition-colors"
+              placeholder="Your name"
+              class="w-full border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 transition-colors"
             />
           </div>
           <div>
-            <label class="block text-[#9CA3AF] text-sm mb-1.5">Email</label>
+            <label class="block text-xs font-mono uppercase tracking-widest text-gray-400 mb-2">Email</label>
             <input
               v-model="email"
               type="email"
-              placeholder="tu@email.com"
-              class="w-full bg-[#0B0C0E] border border-[#2A2D35] rounded-lg px-4 py-2.5 text-white placeholder-[#4B5563] text-sm focus:outline-none focus:border-[#A8FF00] transition-colors"
+              placeholder="you@example.com"
+              class="w-full border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 transition-colors"
             />
           </div>
 
-          <p v-if="error" class="text-red-400 text-sm">{{ error }}</p>
+          <p v-if="error" class="text-red-500 text-xs font-mono">{{ error }}</p>
 
           <button
             type="submit"
             :disabled="loading"
-            class="w-full bg-[#A8FF00] text-[#0B0C0E] font-bold py-3 rounded-lg hover:bg-[#BFFF33] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            class="w-full bg-gray-900 text-white font-semibold py-3 text-sm hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {{ loading ? 'Registrando...' : 'Confirmar registro' }}
+            {{ loading ? 'Registering...' : 'Confirm registration' }}
           </button>
         </form>
       </template>
 
       <template v-else>
         <div class="text-center py-6">
-          <div class="w-14 h-14 rounded-full bg-[#A8FF00]/10 flex items-center justify-center mx-auto mb-4">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A8FF00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <div class="w-12 h-12 bg-[#A8FF00] flex items-center justify-center mx-auto mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
           </div>
-          <h3 class="text-white font-bold text-xl mb-2">¡Registro exitoso!</h3>
-          <p class="text-[#9CA3AF] text-sm mb-6">Te enviaremos los detalles por email antes del evento.</p>
+          <h3 class="text-2xl font-black text-gray-900 mb-2">You're registered!</h3>
+          <p class="text-sm text-gray-500 mb-6">We'll send you the access link before the session.</p>
           <button
             @click="emit('close')"
-            class="bg-[#A8FF00] text-[#0B0C0E] font-bold px-6 py-2.5 rounded-lg hover:bg-[#BFFF33] transition-colors"
+            class="bg-gray-900 text-white font-semibold px-8 py-2.5 text-sm hover:bg-gray-700 transition-colors"
           >
-            Cerrar
+            Close
           </button>
         </div>
       </template>

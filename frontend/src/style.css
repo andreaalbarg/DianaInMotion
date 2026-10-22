@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
-
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -16,9 +12,9 @@ html {
 
 body {
   margin: 0;
-  background-color: #0B0C0E;
-  color: #E8E8E8;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background-color: #fff;
+  color: #111827;
+  font-family: "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -26,6 +22,43 @@ body {
 #app {
   width: 100%;
   min-height: 100vh;
+  text-align: left;
+}
+
+/* Section tag — matches sourcecoding.ai pattern */
+.section-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.section-tag .tag-num {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: #111;
+  color: #fff;
+  font-family: ui-monospace, monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.4rem;
+}
+
+.section-tag .tag-label {
+  font-family: ui-monospace, monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #aaa;
+}
+
+.section-tag .tag-rule {
+  flex: 1;
+  height: 1px;
+  background: #e5e5e5;
 }
 
 .line-clamp-2 {

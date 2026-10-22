@@ -5,32 +5,32 @@ function scrollTo(id: string) {
 </script>
 
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-[#0B0C0E]/90 backdrop-blur-sm border-b border-[#1E2028]">
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-[#A8FF00] flex items-center justify-center">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <rect x="2" y="3" width="2.5" height="12" rx="1" fill="#0B0C0E"/>
-            <rect x="5.5" y="3" width="2.5" height="12" rx="1" fill="#0B0C0E"/>
-            <path d="M10 5.5L15.5 9L10 12.5V5.5Z" fill="#0B0C0E"/>
+        <div class="w-7 h-7 bg-[#A8FF00] flex items-center justify-center flex-shrink-0">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="3" width="2.5" height="12" rx="0" fill="#111"/>
+            <rect x="5.5" y="3" width="2.5" height="12" rx="0" fill="#111"/>
+            <path d="M10 5.5L15.5 9L10 12.5V5.5Z" fill="#111"/>
           </svg>
         </div>
-        <div>
-          <span class="text-white font-semibold text-sm leading-none">Diana in Motion</span>
-          <span class="block text-[#6B7280] text-xs">Live Training Series</span>
+        <div class="leading-none">
+          <span class="text-gray-900 font-black text-sm tracking-tight">Diana in Motion</span>
+          <span class="block text-gray-400 font-mono text-[10px] uppercase tracking-widest">Live Training Series</span>
         </div>
       </div>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm text-[#9CA3AF]">
-        <button @click="scrollTo('upcoming')" class="hover:text-white transition-colors">Próximas sesiones</button>
-        <button @click="scrollTo('ondemand')" class="hover:text-white transition-colors">On Demand</button>
+      <nav class="hidden md:flex items-center gap-8 text-sm text-gray-500">
+        <button @click="scrollTo('upcoming')" class="hover:text-gray-900 transition-colors">Upcoming</button>
+        <button @click="scrollTo('ondemand')" class="hover:text-gray-900 transition-colors">On Demand</button>
       </nav>
 
       <button
         @click="scrollTo('upcoming')"
-        class="bg-[#A8FF00] text-[#0B0C0E] text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#BFFF33] transition-colors"
+        class="bg-gray-900 text-white text-xs font-semibold px-5 py-2 hover:bg-gray-700 transition-colors"
       >
-        Registrarme
+        Register
       </button>
     </div>
   </header>
