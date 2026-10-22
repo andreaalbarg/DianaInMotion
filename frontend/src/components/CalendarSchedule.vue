@@ -126,12 +126,28 @@ function formatTime(iso: string) {
               </div>
 
               <!-- Event info -->
-              <div>
-                <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-1">
-                  {{ event.category === 'basics' ? 'Basics' : 'Advanced' }} · {{ formatTime(event.scheduledAt) }} UTC
-                </p>
-                <h4 class="text-base font-black text-[#231f20] leading-tight">{{ event.title }}</h4>
-                <p v-if="event.speaker" class="text-xs text-gray-400 font-mono mt-1">{{ event.speaker }}</p>
+              <div class="flex items-start gap-4">
+                <!-- Speaker avatar -->
+                <div v-if="event.speaker" class="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gray-100 mt-1">
+                  <img
+                    v-if="event.speakerPhotoUrl"
+                    :src="event.speakerPhotoUrl"
+                    :alt="event.speaker"
+                    class="w-full h-full object-cover"
+                  />
+                  <div v-else class="w-full h-full bg-[#231f20] flex items-center justify-center">
+                    <span class="text-[#c2f33d] text-xs font-black select-none">
+                      {{ event.speaker.split(' ').map((w: string) => w[0]).slice(0, 2).join('').toUpperCase() }}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-1">
+                    {{ event.category === 'basics' ? 'Basics' : 'Advanced' }} · {{ formatTime(event.scheduledAt) }} UTC
+                  </p>
+                  <h4 class="text-base font-black text-[#231f20] leading-tight">{{ event.title }}</h4>
+                  <p v-if="event.speaker" class="text-xs text-gray-400 font-mono mt-1">{{ event.speaker }}</p>
+                </div>
               </div>
             </div>
 
