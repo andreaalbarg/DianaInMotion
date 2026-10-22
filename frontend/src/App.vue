@@ -212,14 +212,7 @@ function scrollToSection(id: string) {
     <footer class="bg-[#231f20] border-t border-[#2d2829] py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <div class="w-6 h-6 bg-[#c2f33d] flex items-center justify-center">
-            <svg width="12" height="12" viewBox="0 0 18 18" fill="none">
-              <rect x="2" y="3" width="2.5" height="12" fill="#231f20"/>
-              <rect x="5.5" y="3" width="2.5" height="12" fill="#231f20"/>
-              <path d="M10 5.5L15.5 9L10 12.5V5.5Z" fill="#231f20"/>
-            </svg>
-          </div>
-          <span class="text-gray-500 text-xs font-mono">Diana in Motion · Live Training Series</span>
+          <img src="/logo-diana-in-motion.png" alt="Diana in Motion" class="h-5 w-auto brightness-0 invert opacity-50" />
         </div>
         <p class="text-gray-600 text-xs font-mono">sourcecoding.ai · Weekly community sessions</p>
       </div>
