@@ -112,23 +112,29 @@ function formatTime(iso: string) {
           <div
             v-for="event in monthEvents"
             :key="event.id"
-            class="py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            class="py-8 flex flex-col sm:flex-row sm:items-start justify-between gap-8"
           >
-            <div class="flex gap-5 items-start">
-              <!-- Date block -->
-              <div class="flex-shrink-0 text-center w-12">
-                <p class="text-3xl font-black text-[#231f20] leading-none">
-                  {{ new Date(event.scheduledAt).getUTCDate() }}
-                </p>
-                <p class="text-xs font-mono text-gray-400 uppercase tracking-wide">
-                  {{ new Date(event.scheduledAt).toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }) }}
-                </p>
-              </div>
+            <!-- Date block -->
+            <div class="flex-shrink-0 text-center w-14">
+              <p class="text-4xl font-black text-[#231f20] leading-none">
+                {{ new Date(event.scheduledAt).getUTCDate() }}
+              </p>
+              <p class="text-xs font-mono text-gray-400 uppercase tracking-wide mt-1">
+                {{ new Date(event.scheduledAt).toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }) }}
+              </p>
+            </div>
 
-              <!-- Event info -->
-              <div class="flex items-start gap-4">
-                <!-- Speaker avatar -->
-                <div v-if="event.speaker" class="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gray-100 mt-1">
+            <!-- Event info + speaker avatar together -->
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-2">
+                {{ event.category === 'basics' ? 'Basics' : 'Advanced' }} · {{ formatTime(event.scheduledAt) }} UTC
+              </p>
+              <h4 class="text-xl font-black text-[#231f20] leading-tight mb-2">{{ event.title }}</h4>
+              <p class="text-sm text-gray-500 leading-relaxed mb-4">{{ event.description }}</p>
+
+              <!-- Speaker row inside info column -->
+              <div v-if="event.speaker" class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
                   <img
                     v-if="event.speakerPhotoUrl"
                     :src="event.speakerPhotoUrl"
@@ -136,25 +142,21 @@ function formatTime(iso: string) {
                     class="w-full h-full object-cover"
                   />
                   <div v-else class="w-full h-full bg-[#231f20] flex items-center justify-center">
-                    <span class="text-[#c2f33d] text-xs font-black select-none">
+                    <span class="text-[#c2f33d] text-[10px] font-black select-none">
                       {{ event.speaker.split(' ').map((w: string) => w[0]).slice(0, 2).join('').toUpperCase() }}
                     </span>
                   </div>
                 </div>
-                <div>
-                  <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-1">
-                    {{ event.category === 'basics' ? 'Basics' : 'Advanced' }} · {{ formatTime(event.scheduledAt) }} UTC
-                  </p>
-                  <h4 class="text-base font-black text-[#231f20] leading-tight mb-1">{{ event.title }}</h4>
-                  <p class="text-sm text-gray-500 leading-relaxed mb-2">{{ event.description }}</p>
-                  <p class="text-xs text-gray-400 font-mono">{{ event.registrationCount }} registered</p>
+                <div class="leading-none">
+                  <p class="text-xs font-semibold text-[#231f20]">{{ event.speaker }}</p>
+                  <p class="text-xs text-gray-400 font-mono mt-0.5">{{ event.registrationCount }} registered</p>
                 </div>
               </div>
             </div>
 
             <button
               @click="onRegister(event)"
-              class="flex-shrink-0 bg-[#231f20] text-white text-xs font-semibold px-5 py-2 hover:bg-[#3d3839] transition-colors self-start sm:self-center"
+              class="flex-shrink-0 bg-[#231f20] text-white text-xs font-semibold px-6 py-2.5 hover:bg-[#3d3839] transition-colors self-start"
             >
               Register →
             </button>
