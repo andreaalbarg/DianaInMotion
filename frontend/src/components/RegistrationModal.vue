@@ -43,7 +43,7 @@ function formatDate(iso: string) {
     <div class="absolute inset-0 bg-black/50" @click="emit('close')" />
 
     <div class="relative w-full max-w-md bg-white border border-gray-200 p-8 shadow-xl">
-      <button @click="emit('close')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors">
+      <button @click="emit('close')" class="absolute top-4 right-4 text-gray-400 hover:text-[#231f20] transition-colors">
         <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
           <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/>
         </svg>
@@ -54,7 +54,7 @@ function formatDate(iso: string) {
           <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-3">
             {{ event.category === 'basics' ? 'In Motion / Basics' : 'In Motion / Advanced' }}
           </p>
-          <h2 class="text-2xl font-black text-gray-900 leading-tight mb-2">{{ event.title }}</h2>
+          <h2 class="text-2xl font-black text-[#231f20] leading-tight mb-2">{{ event.title }}</h2>
           <p class="text-sm text-gray-500 font-mono">{{ formatDate(event.scheduledAt) }}</p>
         </div>
 
@@ -65,7 +65,7 @@ function formatDate(iso: string) {
               v-model="name"
               type="text"
               placeholder="Your name"
-              class="w-full border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 transition-colors"
+              class="w-full border border-gray-300 px-4 py-2.5 text-sm text-[#231f20] placeholder-gray-400 focus:outline-none focus:border-[#231f20] transition-colors"
             />
           </div>
           <div>
@@ -74,7 +74,7 @@ function formatDate(iso: string) {
               v-model="email"
               type="email"
               placeholder="you@example.com"
-              class="w-full border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 transition-colors"
+              class="w-full border border-gray-300 px-4 py-2.5 text-sm text-[#231f20] placeholder-gray-400 focus:outline-none focus:border-[#231f20] transition-colors"
             />
           </div>
 
@@ -83,7 +83,7 @@ function formatDate(iso: string) {
           <button
             type="submit"
             :disabled="loading"
-            class="w-full bg-gray-900 text-white font-semibold py-3 text-sm hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full bg-[#231f20] text-white font-semibold py-3 text-sm hover:bg-[#3d3839] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {{ loading ? 'Registering...' : 'Confirm registration' }}
           </button>
@@ -93,15 +93,15 @@ function formatDate(iso: string) {
       <template v-else>
         <div class="text-center py-6">
           <div class="w-12 h-12 bg-[#c2f33d] flex items-center justify-center mx-auto mb-5">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
           </div>
-          <h3 class="text-2xl font-black text-gray-900 mb-2">You're registered!</h3>
+          <h3 class="text-2xl font-black text-[#231f20] mb-2">You're registered!</h3>
           <p class="text-sm text-gray-500 mb-6">We'll send you the access link before the session.</p>
           <button
             @click="emit('close')"
-            class="bg-gray-900 text-white font-semibold px-8 py-2.5 text-sm hover:bg-gray-700 transition-colors"
+            class="bg-[#231f20] text-white font-semibold px-8 py-2.5 text-sm hover:bg-[#3d3839] transition-colors"
           >
             Close
           </button>

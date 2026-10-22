@@ -24,13 +24,13 @@ function daysUntil(iso: string) {
       <p class="text-xs font-mono uppercase tracking-widest text-gray-400">
         {{ event.category === 'basics' ? 'Basics' : 'Advanced' }}
       </p>
-      <span v-if="!event.isPast && daysUntil(event.scheduledAt) <= 14" class="text-xs font-mono text-[#c2f33d] bg-gray-900 px-2 py-0.5">
+      <span v-if="!event.isPast && daysUntil(event.scheduledAt) <= 14" class="text-xs font-mono text-[#c2f33d] bg-[#231f20] px-2 py-0.5">
         In {{ daysUntil(event.scheduledAt) }}d
       </span>
     </div>
 
     <div class="flex-1">
-      <h3 class="text-lg font-black text-gray-900 leading-snug mb-3">{{ event.title }}</h3>
+      <h3 class="text-lg font-black text-[#231f20] leading-snug mb-3">{{ event.title }}</h3>
       <p class="text-sm text-gray-500 leading-relaxed line-clamp-2">{{ event.description }}</p>
     </div>
 
@@ -55,7 +55,7 @@ function daysUntil(iso: string) {
         <span class="text-xs text-gray-400 font-mono">{{ event.registrationCount }} registered</span>
         <button
           @click="onRegister?.()"
-          class="bg-gray-900 text-white text-xs font-semibold px-5 py-2 hover:bg-gray-700 transition-colors"
+          class="bg-[#231f20] text-white text-xs font-semibold px-5 py-2 hover:bg-[#3d3839] transition-colors"
         >
           Register →
         </button>

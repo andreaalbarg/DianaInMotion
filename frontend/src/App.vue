@@ -42,7 +42,7 @@ function scrollToSection(id: string) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-white text-gray-900">
+  <div class="min-h-screen bg-white text-[#231f20]">
     <NavBar />
 
     <!-- Hero -->
@@ -61,7 +61,7 @@ function scrollToSection(id: string) {
               <span class="text-xs font-mono uppercase tracking-widest text-gray-400">Live every week</span>
             </div>
 
-            <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-none tracking-tight mb-10 whitespace-pre-line">
+            <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black text-[#231f20] leading-none tracking-tight mb-10 whitespace-pre-line">
               Learn to build<br/>with Diana,<br/><span style="color:#c2f33d">live.</span>
             </h1>
 
@@ -72,7 +72,7 @@ function scrollToSection(id: string) {
             <div class="flex flex-wrap gap-3">
               <button
                 @click="scrollToSection('upcoming')"
-                class="px-6 py-3 bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
+                class="px-6 py-3 bg-[#231f20] text-white text-sm font-semibold hover:bg-[#3d3839] transition-colors"
               >
                 View upcoming sessions
               </button>
@@ -89,17 +89,17 @@ function scrollToSection(id: string) {
           <div class="hidden md:flex flex-col gap-4 pt-2">
             <div class="border border-gray-200 p-6">
               <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Track 01</p>
-              <h3 class="text-xl font-black text-gray-900 mb-2">In Motion / Basics</h3>
+              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / Basics</h3>
               <p class="text-sm text-gray-500 leading-relaxed">First steps, core features and essential workflows to start building with Diana.</p>
             </div>
             <div class="border border-gray-200 p-6">
               <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Track 02</p>
-              <h3 class="text-xl font-black text-gray-900 mb-2">In Motion / Advanced</h3>
+              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / Advanced</h3>
               <p class="text-sm text-gray-500 leading-relaxed">Complex projects, integrations, external APIs, and advanced deployment workflows.</p>
             </div>
             <div class="border border-gray-200 p-6">
               <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Track 03</p>
-              <h3 class="text-xl font-black text-gray-900 mb-2">In Motion / On Demand</h3>
+              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / On Demand</h3>
               <p class="text-sm text-gray-500 leading-relaxed">Recordings of past sessions — learn at your own pace, anytime.</p>
             </div>
           </div>
@@ -118,7 +118,7 @@ function scrollToSection(id: string) {
 
         <div class="flex items-end justify-between gap-6 mb-10">
           <div>
-            <h2 class="text-4xl sm:text-5xl font-black text-gray-900 leading-tight mb-3">What's coming up</h2>
+            <h2 class="text-4xl sm:text-5xl font-black text-[#231f20] leading-tight mb-3">What's coming up</h2>
             <p class="text-gray-500 leading-relaxed max-w-md">Register to get the access link sent to your inbox before the session starts.</p>
           </div>
         </div>
@@ -153,7 +153,7 @@ function scrollToSection(id: string) {
 
         <div class="flex items-end justify-between gap-6 mb-10">
           <div>
-            <h2 class="text-4xl sm:text-5xl font-black text-gray-900 leading-tight mb-3">Past sessions</h2>
+            <h2 class="text-4xl sm:text-5xl font-black text-[#231f20] leading-tight mb-3">Past sessions</h2>
             <p class="text-gray-500 leading-relaxed max-w-md">All previous sessions are recorded. Learn at your own pace — wherever you are.</p>
           </div>
         </div>
@@ -177,10 +177,10 @@ function scrollToSection(id: string) {
     </section>
 
     <!-- Bottom CTA -->
-    <section class="bg-gray-900 py-20">
+    <section class="bg-[#231f20] py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="section-tag">
-          <span class="tag-num" style="background:#fff;color:#111">04</span>
+          <span class="tag-num" style="background:#fff;color:#231f20">04</span>
           <span class="tag-label" style="color:#666">Get started</span>
           <span class="tag-rule" style="background:#333"></span>
         </div>
@@ -192,7 +192,7 @@ function scrollToSection(id: string) {
         <div class="flex flex-wrap gap-3">
           <button
             @click="scrollToSection('upcoming')"
-            class="px-6 py-3 bg-white text-gray-900 text-sm font-semibold hover:bg-gray-100 transition-colors"
+            class="px-6 py-3 bg-white text-[#231f20] text-sm font-semibold hover:bg-gray-100 transition-colors"
           >
             Register for a session
           </button>
@@ -209,14 +209,14 @@ function scrollToSection(id: string) {
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-800 py-8">
+    <footer class="bg-[#231f20] border-t border-[#2d2829] py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
           <div class="w-6 h-6 bg-[#c2f33d] flex items-center justify-center">
             <svg width="12" height="12" viewBox="0 0 18 18" fill="none">
-              <rect x="2" y="3" width="2.5" height="12" fill="#111"/>
-              <rect x="5.5" y="3" width="2.5" height="12" fill="#111"/>
-              <path d="M10 5.5L15.5 9L10 12.5V5.5Z" fill="#111"/>
+              <rect x="2" y="3" width="2.5" height="12" fill="#231f20"/>
+              <rect x="5.5" y="3" width="2.5" height="12" fill="#231f20"/>
+              <path d="M10 5.5L15.5 9L10 12.5V5.5Z" fill="#231f20"/>
             </svg>
           </div>
           <span class="text-gray-500 text-xs font-mono">Diana in Motion · Live Training Series</span>

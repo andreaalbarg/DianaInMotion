@@ -13,7 +13,7 @@ html {
 body {
   margin: 0;
   background-color: #fff;
-  color: #111827;
+  color: #231f20;
   font-family: "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -37,7 +37,7 @@ body {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  background: #111;
+  background: #231f20;
   color: #fff;
   font-family: ui-monospace, monospace;
   font-size: 0.65rem;
