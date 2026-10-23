@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import NavBar from './components/NavBar.vue'
 import CalendarSchedule from './components/CalendarSchedule.vue'
 import RegistrationModal from './components/RegistrationModal.vue'
+import EventCard from './components/EventCard.vue'
 import { fetchUpcomingEvents, fetchPastEvents } from './services/api'
 import type { Event } from './types'
 
