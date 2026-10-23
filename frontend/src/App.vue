@@ -213,12 +213,18 @@ async function submitNewsletter() {
             <svg class="absolute inset-0 w-full h-full" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <path id="nl-circle" d="M 130,180 A 120,120 0 1,0 130,180.001" />
+                <filter id="nl-blur" x="-5%" y="-5%" width="110%" height="110%">
+                  <feGaussianBlur stdDeviation="3 1" />
+                </filter>
               </defs>
-              <g style="transform-box: view-box; transform-origin: center; animation: nl-spin 22s linear infinite;">
-                <text fill="rgba(255,255,255,0.55)" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="9">
-                  <textPath href="#nl-circle" startOffset="0%">NEVER MISS A LIVE SESSION · DIANA IN MOTION · </textPath>
-                </text>
-              </g>
+              <!-- Trail layer — blurred and offset, simulates motion -->
+              <text filter="url(#nl-blur)" fill="rgba(255,255,255,0.18)" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="9">
+                <textPath href="#nl-circle" startOffset="2%">NEVER MISS A LIVE SESSION · DIANA IN MOTION · </textPath>
+              </text>
+              <!-- Main text -->
+              <text fill="rgba(255,255,255,0.6)" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="9">
+                <textPath href="#nl-circle" startOffset="0%">NEVER MISS A LIVE SESSION · DIANA IN MOTION · </textPath>
+              </text>
             </svg>
 
             <template v-if="newsletterState !== 'success'">
