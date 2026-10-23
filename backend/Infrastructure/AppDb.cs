@@ -72,6 +72,7 @@ public class AppDb : DbContext
                 Speaker = "Diana Team",
                 SpeakerPhotoUrl = null,
                 RecordingUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                IsFeatured = true,
                 CreatedAt = new DateTime(2026, 9, 10, 0, 0, 0, DateTimeKind.Utc),
             },
             new Event
@@ -84,6 +85,7 @@ public class AppDb : DbContext
                 Speaker = "Diana Team",
                 SpeakerPhotoUrl = null,
                 RecordingUrl = "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+                IsFeatured = true,
                 CreatedAt = new DateTime(2026, 9, 24, 0, 0, 0, DateTimeKind.Utc),
             },
             new Event
@@ -96,6 +98,7 @@ public class AppDb : DbContext
                 Speaker = "Diana Team",
                 SpeakerPhotoUrl = null,
                 RecordingUrl = "https://www.youtube.com/watch?v=9bZkp7q19f0",
+                IsFeatured = true,
                 CreatedAt = new DateTime(2026, 10, 8, 0, 0, 0, DateTimeKind.Utc),
             }
         );

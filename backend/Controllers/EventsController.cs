@@ -33,6 +33,7 @@ public class EventsController : ControllerBase
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
                 IsPast = false,
+                IsFeatured = e.IsFeatured,
                 RegistrationCount = e.Registrations.Count()
             })
             .ToListAsync(ct);
@@ -57,6 +58,33 @@ public class EventsController : ControllerBase
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
                 IsPast = true,
+                IsFeatured = e.IsFeatured,
+                RegistrationCount = e.Registrations.Count()
+            })
+            .ToListAsync(ct);
+        return Ok(events);
+    }
+
+    [HttpGet("featured")]
+    public async Task<IActionResult> GetFeatured(CancellationToken ct)
+    {
+        var now = DateTime.UtcNow;
+        var events = await _db.Events
+            .Where(e => e.ScheduledAt < now && e.IsFeatured)
+            .OrderByDescending(e => e.ScheduledAt)
+            .Take(3)
+            .Select(e => new EventDto
+            {
+                Id = e.Id,
+                Title = e.Title,
+                Description = e.Description,
+                Category = e.Category,
+                ScheduledAt = e.ScheduledAt,
+                Speaker = e.Speaker,
+                SpeakerPhotoUrl = e.SpeakerPhotoUrl,
+                RecordingUrl = e.RecordingUrl,
+                IsPast = true,
+                IsFeatured = true,
                 RegistrationCount = e.Registrations.Count()
             })
             .ToListAsync(ct);

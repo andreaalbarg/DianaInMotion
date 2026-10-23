@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
   fetchAdminEvents,
   createEvent,
   updateEvent,
   deleteEvent,
+  setFeatured,
   type AdminEvent,
   type EventWriteRequest,
 } from '../../services/adminApi'
 
 const events = ref<AdminEvent[]>([])
 const loading = ref(true)
+const featuredCount = computed(() => events.value.filter(e => e.isPast && e.isFeatured).length)
 const showForm = ref(false)
 const editingId = ref<string | null>(null)
 const error = ref('')
@@ -80,6 +82,15 @@ async function submit() {
   }
 }
 
+async function toggleFeatured(ev: AdminEvent) {
+  try {
+    await setFeatured(ev.id, !ev.isFeatured)
+    await load()
+  } catch (e: any) {
+    alert(e?.response?.data?.title ?? 'No se pudo actualizar.')
+  }
+}
+
 async function remove(id: string, title: string) {
   if (!confirm(`Delete "${title}"?`)) return
   await deleteEvent(id)
@@ -99,7 +110,13 @@ onMounted(load)
 <template>
   <div>
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-black">Events</h1>
+      <div>
+        <h1 class="text-2xl font-black">Events</h1>
+        <p class="text-sm text-white/40 mt-0.5">
+          <span :class="featuredCount >= 3 ? 'text-[#c2f33d]' : 'text-white/40'">{{ featuredCount }}/3</span>
+          past sessions destacadas en el landing
+        </p>
+      </div>
       <button
         @click="openCreate"
         class="bg-[#c2f33d] text-[#231f20] font-bold px-5 py-2 rounded-lg hover:bg-[#d4ff4a] transition-colors text-sm"
@@ -117,6 +134,7 @@ onMounted(load)
             <th class="text-left px-5 py-3">Title</th>
             <th class="text-left px-5 py-3">Category</th>
             <th class="text-left px-5 py-3">Date</th>
+            <th class="text-center px-5 py-3">Featured</th>
             <th class="text-right px-5 py-3">Registrations</th>
             <th class="text-right px-5 py-3"></th>
           </tr>
@@ -133,6 +151,16 @@ onMounted(load)
             </td>
             <td class="px-5 py-3 text-white/60 capitalize">{{ ev.category }}</td>
             <td class="px-5 py-3 text-white/60">{{ formatDate(ev.scheduledAt) }}</td>
+            <td class="px-5 py-3 text-center">
+              <button
+                v-if="ev.isPast"
+                @click="toggleFeatured(ev)"
+                :title="ev.isFeatured ? 'Quitar del landing' : 'Destacar en landing'"
+                class="text-xl transition-all"
+                :class="ev.isFeatured ? 'text-[#c2f33d]' : 'text-white/20 hover:text-white/60'"
+              >★</button>
+              <span v-else class="text-white/10 text-xs">—</span>
+            </td>
             <td class="px-5 py-3 text-right text-white/60">{{ ev.registrationCount }}</td>
             <td class="px-5 py-3 text-right">
               <button @click="openEdit(ev)" class="text-white/40 hover:text-white mr-3 transition-colors">Edit</button>

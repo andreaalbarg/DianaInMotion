@@ -18,6 +18,7 @@ export interface AdminEvent {
   speakerPhotoUrl: string | null
   recordingUrl: string | null
   isPast: boolean
+  isFeatured: boolean
   registrationCount: number
 }
 
@@ -66,6 +67,10 @@ export async function updateEvent(id: string, req: EventWriteRequest): Promise<v
 
 export async function deleteEvent(id: string): Promise<void> {
   await adminApi.delete(`/events/${id}`)
+}
+
+export async function setFeatured(id: string, isFeatured: boolean): Promise<void> {
+  await adminApi.patch(`/events/${id}/featured`, { isFeatured })
 }
 
 export async function fetchRegistrations(eventId?: string): Promise<Registration[]> {

@@ -27,6 +27,7 @@ public class AdminEventsController(AppDb db) : ControllerBase
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
                 IsPast = e.ScheduledAt < DateTime.UtcNow,
+                IsFeatured = e.IsFeatured,
                 RegistrationCount = e.Registrations.Count
             })
             .ToListAsync(ct);
@@ -72,6 +73,28 @@ public class AdminEventsController(AppDb db) : ControllerBase
         return NoContent();
     }
 
+    [HttpPatch("{id:guid}/featured")]
+    public async Task<IActionResult> SetFeatured(Guid id, [FromBody] SetFeaturedRequest req, CancellationToken ct)
+    {
+        var ev = await db.Events.FindAsync([id], ct);
+        if (ev is null) return NotFound();
+
+        if (req.IsFeatured)
+        {
+            var featuredCount = await db.Events
+                .CountAsync(e => e.IsFeatured && e.Id != id, ct);
+            if (featuredCount >= 3)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Ya tienes 3 videos destacados. Quita uno antes de agregar otro."
+                });
+        }
+
+        ev.IsFeatured = req.IsFeatured;
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
     {
@@ -81,4 +104,9 @@ public class AdminEventsController(AppDb db) : ControllerBase
         await db.SaveChangesAsync(ct);
         return NoContent();
     }
+}
+
+public record SetFeaturedRequest
+{
+    public required bool IsFeatured { get; init; }
 }

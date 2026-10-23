@@ -11,6 +11,7 @@ public record EventDto
     public string? SpeakerPhotoUrl { get; init; }
     public string? RecordingUrl { get; init; }
     public bool IsPast { get; init; }
+    public bool IsFeatured { get; init; }
     public int RegistrationCount { get; init; }
 }
 

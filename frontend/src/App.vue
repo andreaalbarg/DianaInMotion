@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import CalendarSchedule from './components/CalendarSchedule.vue'
 import RegistrationModal from './components/RegistrationModal.vue'
 import EventCard from './components/EventCard.vue'
-import { fetchUpcomingEvents, fetchPastEvents, subscribeNewsletter } from './services/api'
+import { fetchUpcomingEvents, fetchFeaturedEvents, subscribeNewsletter } from './services/api'
 import type { Event } from './types'
 
 const upcomingEvents = ref<Event[]>([])
@@ -19,7 +19,7 @@ onMounted(async () => {
     loadingUpcoming.value = false
   }
   try {
-    pastEvents.value = await fetchPastEvents()
+    pastEvents.value = await fetchFeaturedEvents()
   } finally {
     loadingPast.value = false
   }
