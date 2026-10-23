@@ -1,12 +1,24 @@
 import axios from 'axios'
 
-const adminApi = axios.create({ baseURL: '/api/admin' })
+const adminApi = axios.create({ baseURL: '/api/admin', timeout: 15000 })
 
 adminApi.interceptors.request.use(config => {
   const token = localStorage.getItem('admin_token')
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
+
+// On 401 clear token and redirect to login
+adminApi.interceptors.response.use(
+  res => res,
+  err => {
+    if (err?.response?.status === 401) {
+      localStorage.removeItem('admin_token')
+      window.location.href = '/admin/login'
+    }
+    return Promise.reject(err)
+  }
+)
 
 export interface AdminEvent {
   id: string
