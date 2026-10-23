@@ -205,43 +205,58 @@ async function submitNewsletter() {
           <span class="tag-rule" style="background:#333"></span>
         </div>
 
-        <div class="max-w-lg mx-auto text-center">
-          <p class="text-xs font-mono uppercase tracking-widest text-gray-500 mb-4">Stay in the loop</p>
-          <h3 class="text-3xl font-black text-white leading-tight mb-2">Never miss a session.</h3>
-          <p class="text-gray-400 text-sm leading-relaxed mb-8">Get notified before each live session — no spam, just the essentials.</p>
+        <div class="flex flex-col items-center">
 
-          <template v-if="newsletterState !== 'success'">
-            <div class="flex flex-col gap-3">
-              <input
-                v-model="newsletterEmail"
-                type="email"
-                placeholder="your@email.com"
-                @keydown.enter="submitNewsletter"
-                class="w-full border border-[#3d3839] bg-transparent px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-white transition-colors text-center"
-              />
-              <button
-                @click="submitNewsletter"
-                :disabled="newsletterState === 'loading'"
-                class="w-full bg-white text-[#231f20] text-sm font-semibold py-3 hover:bg-gray-100 transition-colors disabled:opacity-50"
-              >
-                {{ newsletterState === 'loading' ? 'Subscribing…' : 'Subscribe →' }}
-              </button>
-            </div>
-            <p v-if="newsletterState === 'error'" class="mt-3 text-xs font-mono text-red-400">{{ newsletterMsg }}</p>
-          </template>
+          <!-- Circular newsletter -->
+          <div class="relative flex items-center justify-center" style="width: 500px; max-width: 100%; height: 300px;">
 
-          <div v-else class="flex items-center justify-center gap-3">
-            <div class="w-8 h-8 bg-[#c2f33d] flex items-center justify-center flex-shrink-0">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="3" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <path id="nl-arc" d="M 130,150 A 120,120 0 1,0 130,150.001" />
+              </defs>
+              <text fill="white" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="9">
+                <textPath href="#nl-arc" startOffset="83%">SUBSCRIBE TO</textPath>
+              </text>
+              <text fill="white" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="9">
+                <textPath href="#nl-arc" startOffset="51%">NEWSLETTER</textPath>
+              </text>
+            </svg>
+
+            <template v-if="newsletterState !== 'success'">
+              <div class="relative z-10 flex" style="width: 240px;">
+                <input
+                  v-model="newsletterEmail"
+                  type="email"
+                  placeholder="your@email.com"
+                  @keydown.enter="submitNewsletter"
+                  class="flex-1 h-12 bg-transparent border border-white/30 border-r-0 px-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-white/70 transition-colors"
+                />
+                <button
+                  @click="submitNewsletter"
+                  :disabled="newsletterState === 'loading'"
+                  class="w-12 h-12 bg-white flex items-center justify-center flex-shrink-0 hover:bg-gray-100 transition-colors disabled:opacity-50"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="2.5" stroke-linecap="square">
+                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </button>
+              </div>
+              <p v-if="newsletterState === 'error'" class="absolute bottom-6 text-xs font-mono text-red-400">{{ newsletterMsg }}</p>
+            </template>
+
+            <div v-else class="relative z-10 flex items-center gap-3">
+              <div class="w-8 h-8 bg-[#c2f33d] flex items-center justify-center flex-shrink-0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="3" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <p class="text-sm font-semibold text-white">{{ newsletterMsg }}</p>
             </div>
-            <p class="text-sm font-semibold text-white">{{ newsletterMsg }}</p>
           </div>
 
           <a
             href="https://app.sourcecoding.ai"
             target="_blank"
             rel="noopener"
-            class="inline-block mt-10 text-gray-500 text-sm hover:text-gray-300 transition-colors"
+            class="mt-2 text-gray-500 text-sm hover:text-gray-300 transition-colors"
           >
             Try Diana for free →
           </a>
