@@ -205,7 +205,7 @@ async function submitNewsletter() {
           <span class="tag-rule" style="background:#333"></span>
         </div>
 
-        <div class="max-w-lg">
+        <div class="max-w-lg mx-auto text-center">
           <p class="text-xs font-mono uppercase tracking-widest text-gray-500 mb-4">Stay in the loop</p>
           <h3 class="text-3xl font-black text-white leading-tight mb-2">Never miss a session.</h3>
           <p class="text-gray-400 text-sm leading-relaxed mb-8">Get notified before each live session — no spam, just the essentials.</p>
@@ -217,12 +217,12 @@ async function submitNewsletter() {
                 type="email"
                 placeholder="your@email.com"
                 @keydown.enter="submitNewsletter"
-                class="w-full border border-[#3d3839] bg-transparent px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#c2f33d] transition-colors"
+                class="w-full border border-[#3d3839] bg-transparent px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-white transition-colors text-center"
               />
               <button
                 @click="submitNewsletter"
                 :disabled="newsletterState === 'loading'"
-                class="w-full bg-[#c2f33d] text-[#231f20] text-sm font-semibold py-3 hover:bg-[#d4ff50] transition-colors disabled:opacity-50"
+                class="w-full bg-white text-[#231f20] text-sm font-semibold py-3 hover:bg-gray-100 transition-colors disabled:opacity-50"
               >
                 {{ newsletterState === 'loading' ? 'Subscribing…' : 'Subscribe →' }}
               </button>
@@ -230,7 +230,7 @@ async function submitNewsletter() {
             <p v-if="newsletterState === 'error'" class="mt-3 text-xs font-mono text-red-400">{{ newsletterMsg }}</p>
           </template>
 
-          <div v-else class="flex items-center gap-3">
+          <div v-else class="flex items-center justify-center gap-3">
             <div class="w-8 h-8 bg-[#c2f33d] flex items-center justify-center flex-shrink-0">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="3" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
