@@ -84,17 +84,17 @@ function scrollToSection(id: string) {
           <div class="hidden md:flex flex-col gap-4">
             <div class="border border-gray-200 p-6">
               <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Track 01</p>
-              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / Basics</h3>
+              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / <span class="text-outlined">Basics</span></h3>
               <p class="text-sm text-gray-500 leading-relaxed">First steps, core features and essential workflows to start building with Diana.</p>
             </div>
             <div class="border border-gray-200 p-6">
               <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Track 02</p>
-              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / Advanced</h3>
+              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / <span class="text-outlined">Advanced</span></h3>
               <p class="text-sm text-gray-500 leading-relaxed">Complex projects, integrations, external APIs, and advanced deployment workflows.</p>
             </div>
             <div class="border border-gray-200 p-6">
               <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Track 03</p>
-              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / On Demand</h3>
+              <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / <span class="text-outlined">On Demand</span></h3>
               <p class="text-sm text-gray-500 leading-relaxed">Recordings of past sessions — learn at your own pace, anytime.</p>
             </div>
           </div>

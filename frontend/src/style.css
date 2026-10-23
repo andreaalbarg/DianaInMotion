@@ -86,6 +86,12 @@ body {
 .live-ghost-1 { transform: translateX(-0.07em); opacity: 0.35; }
 .live-ghost-2 { transform: translateX(-0.17em); opacity: 0.15; }
 
+/* Outlined text — stroke only, no fill */
+.text-outlined {
+  -webkit-text-stroke: 1.5px #231f20;
+  color: transparent;
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
