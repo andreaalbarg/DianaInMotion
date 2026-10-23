@@ -91,7 +91,7 @@ namespace dianainmotion.Backend.Migrations
                             Category = "basics",
                             CreatedAt = new DateTime(2026, 9, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Una introducción general a lo que puedes construir con Diana. Exploramos casos de uso reales y mostramos el potencial de la plataforma.",
-                            RecordingUrl = "https://www.youtube.com/watch?v=placeholder1",
+                            RecordingUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                             ScheduledAt = new DateTime(2026, 9, 17, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
                             Title = "Intro to Diana: What Can You Build?"
@@ -102,7 +102,7 @@ namespace dianainmotion.Backend.Migrations
                             Category = "basics",
                             CreatedAt = new DateTime(2026, 9, 24, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Cómo modelar datos, crear migraciones y conectar tu backend a una base de datos usando EF Core y SQLite.",
-                            RecordingUrl = "https://www.youtube.com/watch?v=placeholder2",
+                            RecordingUrl = "https://www.youtube.com/watch?v=jNQXAC9IVRw",
                             ScheduledAt = new DateTime(2026, 10, 1, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
                             Title = "Working with Databases in Diana"
@@ -113,7 +113,7 @@ namespace dianainmotion.Backend.Migrations
                             Category = "advanced",
                             CreatedAt = new DateTime(2026, 10, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Aprende el flujo de deployment en Diana: preview, staging, producción y cómo gestionar variables de entorno y datos persistentes.",
-                            RecordingUrl = "https://www.youtube.com/watch?v=placeholder3",
+                            RecordingUrl = "https://www.youtube.com/watch?v=9bZkp7q19f0",
                             ScheduledAt = new DateTime(2026, 10, 15, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
                             Title = "Deploying & Shipping Your Diana App"

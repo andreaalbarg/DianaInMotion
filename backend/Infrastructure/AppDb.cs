@@ -70,7 +70,7 @@ public class AppDb : DbContext
                 ScheduledAt = new DateTime(2026, 9, 17, 18, 0, 0, DateTimeKind.Utc),
                 Speaker = "Diana Team",
                 SpeakerPhotoUrl = null,
-                RecordingUrl = "https://www.youtube.com/watch?v=placeholder1",
+                RecordingUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                 CreatedAt = new DateTime(2026, 9, 10, 0, 0, 0, DateTimeKind.Utc),
             },
             new Event
@@ -82,7 +82,7 @@ public class AppDb : DbContext
                 ScheduledAt = new DateTime(2026, 10, 1, 18, 0, 0, DateTimeKind.Utc),
                 Speaker = "Diana Team",
                 SpeakerPhotoUrl = null,
-                RecordingUrl = "https://www.youtube.com/watch?v=placeholder2",
+                RecordingUrl = "https://www.youtube.com/watch?v=jNQXAC9IVRw",
                 CreatedAt = new DateTime(2026, 9, 24, 0, 0, 0, DateTimeKind.Utc),
             },
             new Event
@@ -94,7 +94,7 @@ public class AppDb : DbContext
                 ScheduledAt = new DateTime(2026, 10, 15, 18, 0, 0, DateTimeKind.Utc),
                 Speaker = "Diana Team",
                 SpeakerPhotoUrl = null,
-                RecordingUrl = "https://www.youtube.com/watch?v=placeholder3",
+                RecordingUrl = "https://www.youtube.com/watch?v=9bZkp7q19f0",
                 CreatedAt = new DateTime(2026, 10, 8, 0, 0, 0, DateTimeKind.Utc),
             }
         );
