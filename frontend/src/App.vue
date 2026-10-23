@@ -244,7 +244,7 @@ async function submitNewsletter() {
             href="https://app.sourcecoding.ai"
             target="_blank"
             rel="noopener"
-            class="inline-block mt-10 text-gray-500 text-sm hover:text-gray-300 transition-colors"
+            class="inline-block mt-10 border border-white/20 text-white text-sm font-semibold px-6 py-3 hover:bg-white/10 transition-colors"
           >
             Try Diana for free →
           </a>
