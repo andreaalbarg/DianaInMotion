@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import NavBar from './components/NavBar.vue'
 import CalendarSchedule from './components/CalendarSchedule.vue'
 import RegistrationModal from './components/RegistrationModal.vue'
 import EventCard from './components/EventCard.vue'
@@ -62,7 +61,6 @@ async function submitNewsletter() {
 
 <template>
   <div class="min-h-screen bg-white text-[#231f20]">
-    <NavBar />
 
     <!-- Hero -->
     <section class="pt-16">
