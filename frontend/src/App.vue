@@ -205,10 +205,10 @@ async function submitNewsletter() {
           <span class="tag-rule" style="background:#333"></span>
         </div>
 
-        <div class="max-w-xl">
+        <div class="max-w-2xl mx-auto text-center">
           <p class="text-xs font-mono uppercase tracking-widest text-gray-500 mb-6">Stay in the loop</p>
-          <h2 class="text-5xl sm:text-6xl font-black text-white leading-none tracking-tight mb-10">
-            Never miss<br/>a live session.
+          <h2 class="text-5xl sm:text-6xl font-black text-white leading-none tracking-tight mb-10 whitespace-nowrap">
+            Never miss a live session.
           </h2>
 
           <template v-if="newsletterState !== 'success'">
@@ -233,7 +233,7 @@ async function submitNewsletter() {
             <p v-if="newsletterState === 'error'" class="mt-3 text-xs font-mono text-red-400">{{ newsletterMsg }}</p>
           </template>
 
-          <div v-else class="flex items-center gap-3">
+          <div v-else class="flex items-center justify-center gap-3">
             <div class="w-8 h-8 bg-[#c2f33d] flex items-center justify-center flex-shrink-0">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="3" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
