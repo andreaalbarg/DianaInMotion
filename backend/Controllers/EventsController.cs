@@ -1,5 +1,6 @@
 using dianainmotion.Backend.Infrastructure;
 using dianainmotion.Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace dianainmotion.Backend.Controllers;
 
 [ApiController]
 [Route("api/events")]
+[AllowAnonymous]
 public class EventsController : ControllerBase
 {
     private readonly AppDb _db;
