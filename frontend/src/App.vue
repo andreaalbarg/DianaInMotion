@@ -196,58 +196,7 @@ async function submitNewsletter() {
       </div>
     </section>
 
-    <!-- Newsletter -->
-    <section class="bg-[#c2f33d]">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-
-          <!-- Left: heading -->
-          <div>
-            <p class="text-xs font-mono uppercase tracking-widest text-[#231f20]/50 mb-6">Stay in the loop</p>
-            <h2 class="text-5xl sm:text-6xl lg:text-7xl font-black text-[#231f20] leading-none tracking-tight">
-              Never miss<br/>a live<br/>session.
-            </h2>
-          </div>
-
-          <!-- Right: form -->
-          <div>
-            <p class="text-[#231f20]/70 leading-relaxed mb-8 text-lg">
-              Get notified before each session goes live — no spam, just the essentials.
-            </p>
-
-            <template v-if="newsletterState !== 'success'">
-              <div class="flex flex-col gap-3">
-                <input
-                  v-model="newsletterEmail"
-                  type="email"
-                  placeholder="your@email.com"
-                  @keydown.enter="submitNewsletter"
-                  class="w-full border-2 border-[#231f20] bg-transparent px-5 py-4 text-sm text-[#231f20] placeholder-[#231f20]/40 focus:outline-none"
-                />
-                <button
-                  @click="submitNewsletter"
-                  :disabled="newsletterState === 'loading'"
-                  class="w-full bg-[#231f20] text-[#c2f33d] text-sm font-semibold py-4 hover:bg-[#3d3839] transition-colors disabled:opacity-50"
-                >
-                  {{ newsletterState === 'loading' ? 'Subscribing…' : 'Subscribe →' }}
-                </button>
-              </div>
-              <p v-if="newsletterState === 'error'" class="mt-3 text-xs font-mono text-[#231f20]/70">{{ newsletterMsg }}</p>
-            </template>
-
-            <div v-else class="flex items-center gap-4">
-              <div class="w-10 h-10 bg-[#231f20] flex items-center justify-center flex-shrink-0">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c2f33d" stroke-width="3" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <p class="text-lg font-black text-[#231f20]">{{ newsletterMsg }}</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Bottom CTA -->
+    <!-- Bottom CTA + Newsletter -->
     <section class="bg-[#231f20] py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="section-tag">
@@ -256,25 +205,66 @@ async function submitNewsletter() {
           <span class="tag-rule" style="background:#333"></span>
         </div>
 
-        <p class="text-xs font-mono uppercase tracking-widest text-gray-500 mb-6">Diana in Motion · Ideas into action</p>
-        <h2 class="text-5xl sm:text-7xl font-black text-white leading-none tracking-tight mb-10 whitespace-pre-line">
-          Turn your ideas<br/>into software.
-        </h2>
-        <div class="flex flex-wrap gap-3">
-          <button
-            @click="scrollToSection('upcoming')"
-            class="px-6 py-3 bg-white text-[#231f20] text-sm font-semibold hover:bg-gray-100 transition-colors"
-          >
-            Register for a session
-          </button>
-          <a
-            href="https://app.sourcecoding.ai"
-            target="_blank"
-            rel="noopener"
-            class="px-6 py-3 text-gray-500 text-sm self-center hover:text-gray-300 transition-colors"
-          >
-            Try Diana for free →
-          </a>
+        <div class="grid md:grid-cols-2 gap-16 items-start">
+
+          <!-- Left: CTA -->
+          <div>
+            <p class="text-xs font-mono uppercase tracking-widest text-gray-500 mb-6">Diana in Motion · Ideas into action</p>
+            <h2 class="text-5xl sm:text-6xl font-black text-white leading-none tracking-tight mb-10">
+              Turn your ideas<br/>into software.
+            </h2>
+            <div class="flex flex-wrap gap-3">
+              <button
+                @click="scrollToSection('upcoming')"
+                class="px-6 py-3 bg-white text-[#231f20] text-sm font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Register for a session
+              </button>
+              <a
+                href="https://app.sourcecoding.ai"
+                target="_blank"
+                rel="noopener"
+                class="px-6 py-3 text-gray-500 text-sm self-center hover:text-gray-300 transition-colors"
+              >
+                Try Diana for free →
+              </a>
+            </div>
+          </div>
+
+          <!-- Right: Newsletter -->
+          <div class="border border-[#2d2829] p-8">
+            <p class="text-xs font-mono uppercase tracking-widest text-gray-500 mb-4">Stay in the loop</p>
+            <h3 class="text-2xl font-black text-white leading-tight mb-2">Never miss a session.</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-8">Get notified before each live session — no spam, just the essentials.</p>
+
+            <template v-if="newsletterState !== 'success'">
+              <div class="flex flex-col gap-3">
+                <input
+                  v-model="newsletterEmail"
+                  type="email"
+                  placeholder="your@email.com"
+                  @keydown.enter="submitNewsletter"
+                  class="w-full border border-[#3d3839] bg-transparent px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#c2f33d] transition-colors"
+                />
+                <button
+                  @click="submitNewsletter"
+                  :disabled="newsletterState === 'loading'"
+                  class="w-full bg-[#c2f33d] text-[#231f20] text-sm font-semibold py-3 hover:bg-[#d4ff50] transition-colors disabled:opacity-50"
+                >
+                  {{ newsletterState === 'loading' ? 'Subscribing…' : 'Subscribe →' }}
+                </button>
+              </div>
+              <p v-if="newsletterState === 'error'" class="mt-3 text-xs font-mono text-red-400">{{ newsletterMsg }}</p>
+            </template>
+
+            <div v-else class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-[#c2f33d] flex items-center justify-center flex-shrink-0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="3" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <p class="text-sm font-semibold text-white">{{ newsletterMsg }}</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
