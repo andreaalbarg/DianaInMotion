@@ -148,6 +148,24 @@ namespace dianainmotion.Backend.Migrations
                     b.ToTable("Registrations");
                 });
 
+            modelBuilder.Entity("dianainmotion.Backend.Models.Subscriber", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Subscribers");
+                });
+
             modelBuilder.Entity("dianainmotion.Backend.Models.Registration", b =>
                 {
                     b.HasOne("dianainmotion.Backend.Models.Event", "Event")

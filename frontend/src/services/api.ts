@@ -16,3 +16,8 @@ export async function registerForEvent(eventId: string, name: string, email: str
   const { data } = await api.post(`/events/${eventId}/register`, { name, email })
   return data as { message: string }
 }
+
+export async function subscribeNewsletter(email: string) {
+  const { data } = await api.post('/subscribers', { email })
+  return data as { message: string }
+}

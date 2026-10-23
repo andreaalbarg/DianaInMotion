@@ -10,6 +10,7 @@ public class AppDb : DbContext
 
     public DbSet<Event> Events => Set<Event>();
     public DbSet<Registration> Registrations => Set<Registration>();
+    public DbSet<Subscriber> Subscribers => Set<Subscriber>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder b)
     {
