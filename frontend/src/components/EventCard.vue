@@ -90,8 +90,8 @@ function youtubeId(url: string | null): string | null {
         <p class="text-sm text-gray-500 leading-relaxed line-clamp-2">{{ event.description }}</p>
       </div>
 
-      <!-- Date -->
-      <div class="flex items-center gap-2 text-xs font-mono text-gray-400">
+      <!-- Date (upcoming only) -->
+      <div v-if="!event.isPast" class="flex items-center gap-2 text-xs font-mono text-gray-400">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
           <rect x="3" y="4" width="18" height="18"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
@@ -108,14 +108,6 @@ function youtubeId(url: string | null): string | null {
           >
             Register →
           </button>
-        </div>
-      </template>
-
-      <!-- Past footer -->
-      <template v-else>
-        <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-          <span class="text-xs text-gray-400 font-mono">{{ event.registrationCount }} attended</span>
-          <span v-if="!event.recordingUrl" class="text-xs text-gray-400 font-mono italic">Recording soon</span>
         </div>
       </template>
 

@@ -149,6 +149,15 @@ function scrollToSection(id: string) {
             <h2 class="text-4xl sm:text-5xl font-black text-[#231f20] leading-tight mb-3">Past sessions</h2>
             <p class="text-gray-500 leading-relaxed max-w-md">All previous sessions are recorded. Learn at your own pace — wherever you are.</p>
           </div>
+          <a
+            href="https://www.youtube.com/@dianainmotion"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex-shrink-0 flex items-center gap-2 border border-[#231f20] text-[#231f20] text-sm font-semibold px-6 py-3 hover:bg-[#231f20] hover:text-white transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Watch all
+          </a>
         </div>
 
         <div v-if="loadingPast" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
