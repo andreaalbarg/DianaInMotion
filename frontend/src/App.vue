@@ -197,42 +197,52 @@ async function submitNewsletter() {
     </section>
 
     <!-- Newsletter -->
-    <section class="border-b border-gray-100">
+    <section class="bg-[#c2f33d]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-        <div class="max-w-2xl">
-          <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Stay in the loop</p>
-          <h2 class="text-4xl sm:text-5xl font-black text-[#231f20] leading-tight mb-4">
-            Never miss a session.
-          </h2>
-          <p class="text-gray-500 leading-relaxed mb-10">
-            Subscribe and get notified before each live session — no spam, just the essentials.
-          </p>
+        <div class="grid md:grid-cols-2 gap-12 items-center">
 
-          <div v-if="newsletterState !== 'success'" class="flex flex-col sm:flex-row gap-3">
-            <input
-              v-model="newsletterEmail"
-              type="email"
-              placeholder="your@email.com"
-              @keydown.enter="submitNewsletter"
-              class="flex-1 border border-gray-300 px-4 py-3 text-sm text-[#231f20] placeholder-gray-400 focus:outline-none focus:border-[#231f20] transition-colors"
-            />
-            <button
-              @click="submitNewsletter"
-              :disabled="newsletterState === 'loading'"
-              class="px-8 py-3 bg-[#c2f33d] text-[#231f20] text-sm font-semibold hover:bg-[#d4ff50] transition-colors disabled:opacity-50"
-            >
-              {{ newsletterState === 'loading' ? 'Subscribing…' : 'Subscribe' }}
-            </button>
+          <!-- Left: heading -->
+          <div>
+            <p class="text-xs font-mono uppercase tracking-widest text-[#231f20]/50 mb-6">Stay in the loop</p>
+            <h2 class="text-5xl sm:text-6xl lg:text-7xl font-black text-[#231f20] leading-none tracking-tight">
+              Never miss<br/>a live<br/>session.
+            </h2>
           </div>
 
-          <div v-if="newsletterState === 'success'" class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-[#c2f33d] flex items-center justify-center flex-shrink-0">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="3" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
+          <!-- Right: form -->
+          <div>
+            <p class="text-[#231f20]/70 leading-relaxed mb-8 text-lg">
+              Get notified before each session goes live — no spam, just the essentials.
+            </p>
+
+            <template v-if="newsletterState !== 'success'">
+              <div class="flex flex-col gap-3">
+                <input
+                  v-model="newsletterEmail"
+                  type="email"
+                  placeholder="your@email.com"
+                  @keydown.enter="submitNewsletter"
+                  class="w-full border-2 border-[#231f20] bg-transparent px-5 py-4 text-sm text-[#231f20] placeholder-[#231f20]/40 focus:outline-none"
+                />
+                <button
+                  @click="submitNewsletter"
+                  :disabled="newsletterState === 'loading'"
+                  class="w-full bg-[#231f20] text-[#c2f33d] text-sm font-semibold py-4 hover:bg-[#3d3839] transition-colors disabled:opacity-50"
+                >
+                  {{ newsletterState === 'loading' ? 'Subscribing…' : 'Subscribe →' }}
+                </button>
+              </div>
+              <p v-if="newsletterState === 'error'" class="mt-3 text-xs font-mono text-[#231f20]/70">{{ newsletterMsg }}</p>
+            </template>
+
+            <div v-else class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-[#231f20] flex items-center justify-center flex-shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c2f33d" stroke-width="3" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <p class="text-lg font-black text-[#231f20]">{{ newsletterMsg }}</p>
             </div>
-            <p class="text-sm font-semibold text-[#231f20]">{{ newsletterMsg }}</p>
           </div>
 
-          <p v-if="newsletterState === 'error'" class="mt-3 text-xs font-mono text-red-500">{{ newsletterMsg }}</p>
         </div>
       </div>
     </section>
