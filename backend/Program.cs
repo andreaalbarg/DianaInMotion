@@ -39,6 +39,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddSingleton(new JwtSettings(jwtSecret));
 
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient("youtube", c =>
+    c.BaseAddress = new Uri("https://www.googleapis.com/youtube/v3/"));
+builder.Services.AddScoped<dianainmotion.Backend.Services.YouTubeService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

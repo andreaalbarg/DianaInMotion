@@ -1,5 +1,6 @@
 using dianainmotion.Backend.Infrastructure;
 using dianainmotion.Backend.Models;
+using dianainmotion.Backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,17 +10,14 @@ namespace dianainmotion.Backend.Controllers;
 [ApiController]
 [Route("api/events")]
 [AllowAnonymous]
-public class EventsController : ControllerBase
+public class EventsController(AppDb db, YouTubeService youtube) : ControllerBase
 {
-    private readonly AppDb _db;
-
-    public EventsController(AppDb db) => _db = db;
 
     [HttpGet("upcoming")]
     public async Task<IActionResult> GetUpcoming(CancellationToken ct)
     {
         var now = DateTime.UtcNow;
-        var events = await _db.Events
+        var events = await db.Events
             .Where(e => e.ScheduledAt >= now)
             .OrderBy(e => e.ScheduledAt)
             .Select(e => new EventDto
@@ -44,7 +42,7 @@ public class EventsController : ControllerBase
     public async Task<IActionResult> GetPast(CancellationToken ct)
     {
         var now = DateTime.UtcNow;
-        var events = await _db.Events
+        var events = await db.Events
             .Where(e => e.ScheduledAt < now)
             .OrderByDescending(e => e.ScheduledAt)
             .Select(e => new EventDto
@@ -68,8 +66,13 @@ public class EventsController : ControllerBase
     [HttpGet("featured")]
     public async Task<IActionResult> GetFeatured(CancellationToken ct)
     {
+        // Try YouTube channel first; fall back to manually-starred DB events
+        var ytVideos = await youtube.GetLatestVideosAsync(ct);
+        if (ytVideos is { Count: > 0 })
+            return Ok(ytVideos);
+
         var now = DateTime.UtcNow;
-        var events = await _db.Events
+        var events = await db.Events
             .Where(e => e.ScheduledAt < now && e.IsFeatured)
             .OrderByDescending(e => e.ScheduledAt)
             .Take(3)
@@ -94,15 +97,15 @@ public class EventsController : ControllerBase
     [HttpPost("{id:guid}/register")]
     public async Task<IActionResult> Register(Guid id, [FromBody] RegisterRequest req, CancellationToken ct)
     {
-        var ev = await _db.Events.FindAsync(new object[] { id }, ct);
+        var ev = await db.Events.FindAsync(new object[] { id }, ct);
         if (ev is null) return NotFound(new { message = "Event not found." });
 
-        var alreadyRegistered = await _db.Registrations
+        var alreadyRegistered = await db.Registrations
             .AnyAsync(r => r.EventId == id && r.Email == req.Email, ct);
         if (alreadyRegistered)
             return Conflict(new { message = "Ya estás registrado con este email." });
 
-        _db.Registrations.Add(new Registration
+        db.Registrations.Add(new Registration
         {
             Id = Guid.NewGuid(),
             EventId = id,
@@ -110,7 +113,7 @@ public class EventsController : ControllerBase
             Email = req.Email,
             RegisteredAt = DateTime.UtcNow
         });
-        await _db.SaveChangesAsync(ct);
+        await db.SaveChangesAsync(ct);
         return Ok(new { message = "¡Registro exitoso! Te enviaremos los detalles por email." });
     }
 }
