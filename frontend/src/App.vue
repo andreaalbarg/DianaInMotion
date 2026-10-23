@@ -49,7 +49,7 @@ function scrollToSection(id: string) {
     <section class="pt-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-16 border-b border-gray-100">
 
-        <div class="grid md:grid-cols-2 gap-0 items-start">
+        <div class="grid md:grid-cols-2 gap-0 items-center">
           <div class="pr-0 md:pr-16">
             <div class="flex items-center gap-2 mb-8">
               <span class="w-2 h-2 bg-[#c2f33d] block"></span>
@@ -81,7 +81,7 @@ function scrollToSection(id: string) {
           </div>
 
           <!-- Categories card -->
-          <div class="hidden md:flex flex-col gap-4 pt-2">
+          <div class="hidden md:flex flex-col gap-4">
             <div class="border border-gray-200 p-6">
               <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Track 01</p>
               <h3 class="text-xl font-black text-[#231f20] mb-2">In Motion / Basics</h3>
