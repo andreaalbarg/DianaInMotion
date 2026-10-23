@@ -28,7 +28,7 @@ public class AdminEventsController(AppDb db) : ControllerBase
                 RecordingUrl = e.RecordingUrl,
                 IsPast = e.ScheduledAt < DateTime.UtcNow,
                 IsFeatured = e.IsFeatured,
-                RegistrationCount = e.Registrations.Count
+                RegistrationCount = e.Registrations.Count()
             })
             .ToListAsync(ct);
 

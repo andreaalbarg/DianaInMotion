@@ -12,6 +12,7 @@ import {
 
 const events = ref<AdminEvent[]>([])
 const loading = ref(true)
+const loadError = ref('')
 const featuredCount = computed(() => events.value.filter(e => e.isPast && e.isFeatured).length)
 const showForm = ref(false)
 const editingId = ref<string | null>(null)
@@ -31,8 +32,11 @@ const form = ref<EventWriteRequest>(emptyForm())
 
 async function load() {
   loading.value = true
+  loadError.value = ''
   try {
     events.value = await fetchAdminEvents()
+  } catch (e: any) {
+    loadError.value = e?.response?.data?.title ?? e?.message ?? 'Error al cargar eventos.'
   } finally {
     loading.value = false
   }
@@ -126,6 +130,10 @@ onMounted(load)
     </div>
 
     <div v-if="loading" class="text-white/40">Loading…</div>
+
+    <div v-else-if="loadError" class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-red-400 text-sm">
+      {{ loadError }}
+    </div>
 
     <div v-else class="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
       <table class="w-full text-sm">
