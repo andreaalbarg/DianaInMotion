@@ -48,11 +48,6 @@ function scrollToSection(id: string) {
     <!-- Hero -->
     <section class="pt-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-16 border-b border-gray-100">
-        <div class="section-tag">
-          <span class="tag-num">01</span>
-          <span class="tag-label">In Motion / Live Training</span>
-          <span class="tag-rule"></span>
-        </div>
 
         <div class="grid md:grid-cols-2 gap-0 items-start">
           <div class="pr-0 md:pr-16">
