@@ -57,7 +57,7 @@ function scrollToSection(id: string) {
             </div>
 
             <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black text-[#231f20] leading-none tracking-tight mb-10 whitespace-pre-line">
-              Learn to build<br/>with Diana,<br/><span class="text-live">LIVE.</span>
+              Learn to build<br/>with Diana,<br/><span class="text-live"><span class="live-ghost live-ghost-1" aria-hidden="true">LIVE.</span><span class="live-ghost live-ghost-2" aria-hidden="true">LIVE.</span><span class="live-ghost live-ghost-3" aria-hidden="true">LIVE.</span><span class="live-ghost live-ghost-4" aria-hidden="true">LIVE.</span><span class="live-solid">LIVE.</span></span>
             </h1>
 
             <p class="text-lg text-gray-500 leading-relaxed mb-10 max-w-md">
