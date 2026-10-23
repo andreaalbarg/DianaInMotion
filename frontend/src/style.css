@@ -86,11 +86,6 @@ body {
 .live-ghost-1 { transform: translateX(-0.07em); opacity: 0.35; }
 .live-ghost-2 { transform: translateX(-0.17em); opacity: 0.15; }
 
-/* Outlined text for track names in hero cards */
-.text-outlined-track {
-  -webkit-text-stroke: 2px #231f20;
-  color: transparent;
-}
 
 .line-clamp-2 {
   display: -webkit-box;
