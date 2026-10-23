@@ -63,8 +63,13 @@ async function submitNewsletter() {
   <div class="min-h-screen bg-white text-[#231f20]">
 
     <!-- Hero -->
-    <section class="pt-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-16 border-b border-gray-100">
+    <section class="pt-0" style="background: linear-gradient(160deg, #f0fcd4 0%, #ffffff 38%);">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-16 border-b border-gray-100">
+
+        <!-- Brand mark -->
+        <div class="mb-14">
+          <img src="/logo-diana-in-motion.png" alt="Diana in Motion" class="h-10 w-auto" />
+        </div>
 
         <div class="grid md:grid-cols-2 gap-0 items-center">
           <div class="pr-0 md:pr-16">
@@ -254,7 +259,7 @@ async function submitNewsletter() {
     <footer class="bg-[#231f20] border-t border-[#2d2829] py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <img src="/logo-diana-in-motion.png" alt="Diana in Motion" class="h-5 w-auto brightness-0 invert opacity-50" />
+          <img src="/logo-diana-in-motion.png" alt="Diana in Motion" class="h-7 w-auto brightness-0 invert opacity-70" />
         </div>
         <p class="text-gray-600 text-xs font-mono">sourcecoding.ai · Weekly community sessions</p>
       </div>
