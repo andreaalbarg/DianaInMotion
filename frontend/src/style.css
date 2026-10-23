@@ -87,6 +87,11 @@ body {
 .live-ghost-2 { transform: translateX(-0.17em); opacity: 0.15; }
 
 
+@keyframes nl-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

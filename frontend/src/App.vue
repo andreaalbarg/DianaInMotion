@@ -207,19 +207,18 @@ async function submitNewsletter() {
 
         <div class="flex flex-col items-center">
 
-          <!-- Circular newsletter -->
-          <div class="relative flex items-center justify-center" style="width: 500px; max-width: 100%; height: 300px;">
+          <!-- Spinning circular text + input -->
+          <div class="relative flex items-center justify-center" style="width: 500px; max-width: 100%; height: 360px;">
 
-            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <path id="nl-arc" d="M 130,150 A 120,120 0 1,0 130,150.001" />
+                <path id="nl-circle" d="M 130,180 A 120,120 0 1,0 130,180.001" />
               </defs>
-              <text fill="white" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="9">
-                <textPath href="#nl-arc" startOffset="83%">SUBSCRIBE TO</textPath>
-              </text>
-              <text fill="white" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="9">
-                <textPath href="#nl-arc" startOffset="51%">NEWSLETTER</textPath>
-              </text>
+              <g style="transform-box: view-box; transform-origin: center; animation: nl-spin 22s linear infinite;">
+                <text fill="rgba(255,255,255,0.55)" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="9">
+                  <textPath href="#nl-circle" startOffset="0%">NEVER MISS A LIVE SESSION · DIANA IN MOTION · </textPath>
+                </text>
+              </g>
             </svg>
 
             <template v-if="newsletterState !== 'success'">
