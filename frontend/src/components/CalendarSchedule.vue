@@ -111,8 +111,8 @@ function initials(name: string) {
                 Math.floor(i / 7) < Math.floor(cells.length / 7) - 1 ? 'border-b border-gray-100' : ''
               ]"
             >
-              <div v-if="eventForDay(day)" class="w-7 h-7 bg-[#231f20] flex items-center justify-center">
-                <span class="text-[#c2f33d] text-xs font-black">{{ day }}</span>
+              <div v-if="eventForDay(day)" class="w-7 h-7 bg-[#c2f33d] flex items-center justify-center">
+                <span class="text-[#231f20] text-xs font-black">{{ day }}</span>
               </div>
               <span v-else class="text-xs text-gray-300">{{ day }}</span>
             </div>
