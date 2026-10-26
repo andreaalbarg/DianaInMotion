@@ -6,6 +6,7 @@ public class Event
     public string Title { get; set; } = "";
     public string Description { get; set; } = "";
     public string Category { get; set; } = "basics"; // "basics" | "advanced"
+    public string Language { get; set; } = "es"; // "es" | "en"
     public DateTime ScheduledAt { get; set; }
     public string? Speaker { get; set; }
     public string? SpeakerPhotoUrl { get; set; }

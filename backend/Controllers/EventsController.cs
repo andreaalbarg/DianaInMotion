@@ -26,6 +26,7 @@ public class EventsController(AppDb db, YouTubeService youtube, IEmailService em
                 Title = e.Title,
                 Description = e.Description,
                 Category = e.Category,
+                Language = e.Language,
                 ScheduledAt = e.ScheduledAt,
                 Speaker = e.Speaker,
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
@@ -52,6 +53,7 @@ public class EventsController(AppDb db, YouTubeService youtube, IEmailService em
                 Title = e.Title,
                 Description = e.Description,
                 Category = e.Category,
+                Language = e.Language,
                 ScheduledAt = e.ScheduledAt,
                 Speaker = e.Speaker,
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
@@ -84,6 +86,7 @@ public class EventsController(AppDb db, YouTubeService youtube, IEmailService em
                 Title = e.Title,
                 Description = e.Description,
                 Category = e.Category,
+                Language = e.Language,
                 ScheduledAt = e.ScheduledAt,
                 Speaker = e.Speaker,
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
@@ -118,7 +121,7 @@ public class EventsController(AppDb db, YouTubeService youtube, IEmailService em
         });
         await db.SaveChangesAsync(ct);
 
-        _ = emailService.SendConfirmationAsync(req.Email, req.Name, ev.Title, ev.ScheduledAt, ev.MeetingUrl, ct);
+        _ = emailService.SendConfirmationAsync(req.Email, req.Name, ev.Title, ev.ScheduledAt, ev.MeetingUrl, ev.Language, ct);
 
         return Ok(new { message = "¡Registro exitoso! Te enviaremos los detalles por email." });
     }

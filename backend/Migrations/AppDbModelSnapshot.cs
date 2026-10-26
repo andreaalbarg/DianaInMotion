@@ -51,6 +51,10 @@ namespace dianainmotion.Backend.Migrations
                     b.Property<bool>("IsFeatured")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("MeetingUrl")
                         .HasColumnType("TEXT");
 
@@ -82,6 +86,7 @@ namespace dianainmotion.Backend.Migrations
                             CreatedAt = new DateTime(2026, 10, 22, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Aprende los fundamentos de Diana: cómo crear tu primera app, los flujos de trabajo esenciales y los building blocks de la plataforma.",
                             IsFeatured = false,
+                            Language = "es",
                             ScheduledAt = new DateTime(2026, 11, 5, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
                             Title = "Getting Started with Diana"
@@ -93,6 +98,7 @@ namespace dianainmotion.Backend.Migrations
                             CreatedAt = new DateTime(2026, 10, 22, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Construye una aplicación completa de punta a punta: frontend, backend y base de datos, todo desde cero con Diana.",
                             IsFeatured = false,
+                            Language = "es",
                             ScheduledAt = new DateTime(2026, 11, 12, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
                             Title = "Building Your First Full-Stack App"
@@ -104,6 +110,7 @@ namespace dianainmotion.Backend.Migrations
                             CreatedAt = new DateTime(2026, 10, 22, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Aprende a conectar tu app con servicios externos: pagos, autenticación, APIs de terceros y más.",
                             IsFeatured = false,
+                            Language = "es",
                             ScheduledAt = new DateTime(2026, 11, 19, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
                             Title = "Integrations & External APIs"
@@ -115,6 +122,7 @@ namespace dianainmotion.Backend.Migrations
                             CreatedAt = new DateTime(2026, 9, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Una introducción general a lo que puedes construir con Diana. Exploramos casos de uso reales y mostramos el potencial de la plataforma.",
                             IsFeatured = true,
+                            Language = "es",
                             RecordingUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                             ScheduledAt = new DateTime(2026, 9, 17, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
@@ -127,6 +135,7 @@ namespace dianainmotion.Backend.Migrations
                             CreatedAt = new DateTime(2026, 9, 24, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Cómo modelar datos, crear migraciones y conectar tu backend a una base de datos usando EF Core y SQLite.",
                             IsFeatured = true,
+                            Language = "es",
                             RecordingUrl = "https://www.youtube.com/watch?v=jNQXAC9IVRw",
                             ScheduledAt = new DateTime(2026, 10, 1, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
@@ -139,6 +148,7 @@ namespace dianainmotion.Backend.Migrations
                             CreatedAt = new DateTime(2026, 10, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Aprende el flujo de deployment en Diana: preview, staging, producción y cómo gestionar variables de entorno y datos persistentes.",
                             IsFeatured = true,
+                            Language = "es",
                             RecordingUrl = "https://www.youtube.com/watch?v=9bZkp7q19f0",
                             ScheduledAt = new DateTime(2026, 10, 15, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",

@@ -44,7 +44,7 @@ public class ReminderBackgroundService(
         {
             await emailService.SendReminderAsync(
                 reg.Email, reg.Name,
-                reg.Event.Title, reg.Event.ScheduledAt, reg.Event.MeetingUrl, ct);
+                reg.Event.Title, reg.Event.ScheduledAt, reg.Event.MeetingUrl, reg.Event.Language, ct);
             reg.ReminderSentAt = DateTime.UtcNow;
         }
 

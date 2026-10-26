@@ -6,8 +6,8 @@ namespace dianainmotion.Backend.Services;
 
 public interface IEmailService
 {
-    Task SendConfirmationAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, CancellationToken ct);
-    Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, CancellationToken ct);
+    Task SendConfirmationAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct);
+    Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct);
 }
 
 public class EmailService(IConfiguration config, ILogger<EmailService> logger) : IEmailService
@@ -28,7 +28,7 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
         );
     }
 
-    public async Task SendConfirmationAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, CancellationToken ct)
+    public async Task SendConfirmationAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct)
     {
         var cfg = GetConfig();
         if (cfg is null)
@@ -36,12 +36,13 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
             logger.LogWarning("SMTP not configured. Skipping confirmation email to {Email}.", toEmail);
             return;
         }
-        var subject = $"¡Registro confirmado! – {eventTitle}";
-        var body = BuildConfirmationBody(toName, eventTitle, scheduledAt, meetingUrl);
+        var es = language != "en";
+        var subject = es ? $"¡Registro confirmado! – {eventTitle}" : $"Registration confirmed! – {eventTitle}";
+        var body = BuildConfirmationBody(toName, eventTitle, scheduledAt, meetingUrl, es);
         await SendAsync(cfg, toEmail, toName, subject, body, ct);
     }
 
-    public async Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, CancellationToken ct)
+    public async Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct)
     {
         var cfg = GetConfig();
         if (cfg is null)
@@ -49,8 +50,9 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
             logger.LogWarning("SMTP not configured. Skipping reminder email to {Email}.", toEmail);
             return;
         }
-        var subject = $"¡Recuerda: mañana es {eventTitle}!";
-        var body = BuildReminderBody(toName, eventTitle, scheduledAt, meetingUrl);
+        var es = language != "en";
+        var subject = es ? $"¡Recuerda: mañana es {eventTitle}!" : $"Reminder: {eventTitle} is tomorrow!";
+        var body = BuildReminderBody(toName, eventTitle, scheduledAt, meetingUrl, es);
         await SendAsync(cfg, toEmail, toName, subject, body, ct);
     }
 
@@ -78,61 +80,96 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
         }
     }
 
-    private static string FormatDate(DateTime dt)
+    private static string FormatDate(DateTime dt, bool es)
     {
-        string[] months = ["", "enero", "febrero", "marzo", "abril", "mayo", "junio",
-            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
-        return $"{dt.Day} de {months[dt.Month]} de {dt.Year} a las {dt.Hour:D2}:{dt.Minute:D2} UTC";
+        if (es)
+        {
+            string[] months = ["", "enero", "febrero", "marzo", "abril", "mayo", "junio",
+                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+            return $"{dt.Day} de {months[dt.Month]} de {dt.Year} a las {dt.Hour:D2}:{dt.Minute:D2} UTC";
+        }
+        return dt.ToString("MMMM d, yyyy") + $" at {dt.Hour:D2}:{dt.Minute:D2} UTC";
     }
 
-    private static string MeetingSection(string? meetingUrl)
+    private static string MeetingSection(string? meetingUrl, bool es)
     {
         if (string.IsNullOrWhiteSpace(meetingUrl))
-            return "<p style='margin:4px 0;color:#666;'>El enlace de acceso estará disponible próximamente.</p>";
+        {
+            var msg = es ? "El enlace de acceso estará disponible próximamente."
+                        : "The access link will be available soon.";
+            return $"<p style='margin:4px 0;color:#666;'>{msg}</p>";
+        }
+        var label = es ? "Liga de acceso" : "Join link";
         var encoded = System.Net.WebUtility.HtmlEncode(meetingUrl);
-        return $"<p style='margin:4px 0;'><strong>Liga de acceso:</strong> <a href='{encoded}' style='color:#7abf1e;word-break:break-all;'>{encoded}</a></p>";
+        return $"<p style='margin:4px 0;'><strong>{label}:</strong> <a href='{encoded}' style='color:#c2f33d;word-break:break-all;'>{encoded}</a></p>";
     }
 
-    private static string BuildConfirmationBody(string name, string eventTitle, DateTime scheduledAt, string? meetingUrl) => $"""
-        <!DOCTYPE html>
-        <html>
-        <body style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px 16px;color:#231f20;">
-          <div style="background:#c2f33d;padding:24px 32px;border-radius:12px 12px 0 0;">
-            <h1 style="margin:0;font-size:22px;color:#231f20;">Diana in Motion</h1>
-          </div>
-          <div style="border:1px solid #e5e7eb;border-top:none;padding:32px;border-radius:0 0 12px 12px;">
-            <h2 style="color:#231f20;">¡Hola, {System.Net.WebUtility.HtmlEncode(name)}!</h2>
-            <p>Tu registro para <strong>{System.Net.WebUtility.HtmlEncode(eventTitle)}</strong> ha sido confirmado. ¡Te esperamos!</p>
-            <div style="background:#f9fafb;border-left:4px solid #c2f33d;padding:16px 20px;margin:24px 0;border-radius:0 8px 8px 0;">
-              <p style="margin:0 0 8px;"><strong>Evento:</strong> {System.Net.WebUtility.HtmlEncode(eventTitle)}</p>
-              <p style="margin:0 0 8px;"><strong>Fecha:</strong> {FormatDate(scheduledAt)}</p>
-              {MeetingSection(meetingUrl)}
-            </div>
-            <p style="color:#666;font-size:14px;">Si tienes alguna pregunta, responde a este correo.</p>
-            <p style="margin-top:32px;">¡Nos vemos ahí!<br/><strong>— El equipo de Diana in Motion</strong></p>
-          </div>
-        </body>
-        </html>
-        """;
+    private static string BuildConfirmationBody(string name, string eventTitle, DateTime scheduledAt, string? meetingUrl, bool es)
+    {
+        var greeting    = es ? $"¡Hola, {H(name)}!" : $"Hi, {H(name)}!";
+        var intro       = es ? $"Tu registro para <strong>{H(eventTitle)}</strong> ha sido confirmado. ¡Te esperamos!"
+                             : $"Your registration for <strong>{H(eventTitle)}</strong> has been confirmed. We look forward to seeing you!";
+        var labelEvento = es ? "Evento" : "Event";
+        var labelFecha  = es ? "Fecha"  : "Date";
+        var footer      = es ? "Si tienes alguna pregunta, responde a este correo."
+                             : "If you have any questions, reply to this email.";
+        var closing     = es ? "¡Nos vemos ahí!" : "See you there!";
+        var team        = es ? "El equipo de Diana in Motion" : "The Diana in Motion team";
 
-    private static string BuildReminderBody(string name, string eventTitle, DateTime scheduledAt, string? meetingUrl) => $"""
-        <!DOCTYPE html>
-        <html>
-        <body style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px 16px;color:#231f20;">
-          <div style="background:#c2f33d;padding:24px 32px;border-radius:12px 12px 0 0;">
-            <h1 style="margin:0;font-size:22px;color:#231f20;">Diana in Motion</h1>
-          </div>
-          <div style="border:1px solid #e5e7eb;border-top:none;padding:32px;border-radius:0 0 12px 12px;">
-            <h2 style="color:#231f20;">¡Hola, {System.Net.WebUtility.HtmlEncode(name)}!</h2>
-            <p>Te recordamos que <strong>mañana</strong> es el evento al que te registraste:</p>
-            <div style="background:#f9fafb;border-left:4px solid #c2f33d;padding:16px 20px;margin:24px 0;border-radius:0 8px 8px 0;">
-              <p style="margin:0 0 8px;"><strong>Evento:</strong> {System.Net.WebUtility.HtmlEncode(eventTitle)}</p>
-              <p style="margin:0 0 8px;"><strong>Fecha:</strong> {FormatDate(scheduledAt)}</p>
-              {MeetingSection(meetingUrl)}
-            </div>
-            <p style="margin-top:32px;">¡Nos vemos mañana!<br/><strong>— El equipo de Diana in Motion</strong></p>
-          </div>
-        </body>
-        </html>
-        """;
+        return $"""
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px 16px;color:#231f20;">
+              <div style="background:#231f20;padding:24px 32px;border-radius:12px 12px 0 0;">
+                <h1 style="margin:0;font-size:22px;color:#ffffff;">Diana in Motion</h1>
+              </div>
+              <div style="border:1px solid #e5e7eb;border-top:none;padding:32px;border-radius:0 0 12px 12px;">
+                <h2 style="color:#231f20;">{greeting}</h2>
+                <p>{intro}</p>
+                <div style="background:#f9fafb;border-left:4px solid #231f20;padding:16px 20px;margin:24px 0;border-radius:0 8px 8px 0;">
+                  <p style="margin:0 0 8px;"><strong>{labelEvento}:</strong> {H(eventTitle)}</p>
+                  <p style="margin:0 0 8px;"><strong>{labelFecha}:</strong> {FormatDate(scheduledAt, es)}</p>
+                  {MeetingSection(meetingUrl, es)}
+                </div>
+                <p style="color:#666;font-size:14px;">{footer}</p>
+                <p style="margin-top:32px;">{closing}<br/><strong>— {team}</strong></p>
+              </div>
+            </body>
+            </html>
+            """;
+    }
+
+    private static string BuildReminderBody(string name, string eventTitle, DateTime scheduledAt, string? meetingUrl, bool es)
+    {
+        var greeting    = es ? $"¡Hola, {H(name)}!" : $"Hi, {H(name)}!";
+        var intro       = es ? $"Te recordamos que <strong>mañana</strong> es el evento al que te registraste:"
+                             : $"This is a reminder that <strong>tomorrow</strong> is the event you registered for:";
+        var labelEvento = es ? "Evento" : "Event";
+        var labelFecha  = es ? "Fecha"  : "Date";
+        var closing     = es ? "¡Nos vemos mañana!" : "See you tomorrow!";
+        var team        = es ? "El equipo de Diana in Motion" : "The Diana in Motion team";
+
+        return $"""
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px 16px;color:#231f20;">
+              <div style="background:#231f20;padding:24px 32px;border-radius:12px 12px 0 0;">
+                <h1 style="margin:0;font-size:22px;color:#ffffff;">Diana in Motion</h1>
+              </div>
+              <div style="border:1px solid #e5e7eb;border-top:none;padding:32px;border-radius:0 0 12px 12px;">
+                <h2 style="color:#231f20;">{greeting}</h2>
+                <p>{intro}</p>
+                <div style="background:#f9fafb;border-left:4px solid #231f20;padding:16px 20px;margin:24px 0;border-radius:0 8px 8px 0;">
+                  <p style="margin:0 0 8px;"><strong>{labelEvento}:</strong> {H(eventTitle)}</p>
+                  <p style="margin:0 0 8px;"><strong>{labelFecha}:</strong> {FormatDate(scheduledAt, es)}</p>
+                  {MeetingSection(meetingUrl, es)}
+                </div>
+                <p style="margin-top:32px;">{closing}<br/><strong>— {team}</strong></p>
+              </div>
+            </body>
+            </html>
+            """;
+    }
+
+    private static string H(string s) => System.Net.WebUtility.HtmlEncode(s);
 }

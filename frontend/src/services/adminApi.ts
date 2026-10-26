@@ -25,6 +25,7 @@ export interface AdminEvent {
   title: string
   description: string
   category: string
+  language: string
   scheduledAt: string
   speaker: string | null
   speakerPhotoUrl: string | null
@@ -39,6 +40,7 @@ export interface EventWriteRequest {
   title: string
   description: string
   category: string
+  language: string
   scheduledAt: string
   speaker?: string
   speakerPhotoUrl?: string

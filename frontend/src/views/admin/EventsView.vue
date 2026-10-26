@@ -22,6 +22,7 @@ const emptyForm = (): EventWriteRequest => ({
   title: '',
   description: '',
   category: 'basics',
+  language: 'es',
   scheduledAt: '',
   speaker: '',
   speakerPhotoUrl: '',
@@ -62,6 +63,7 @@ function openEdit(ev: AdminEvent) {
     category: ev.category,
     scheduledAt: ev.scheduledAt.slice(0, 16),
     speaker: ev.speaker ?? '',
+    language: ev.language ?? 'es',
     speakerPhotoUrl: ev.speakerPhotoUrl ?? '',
     recordingUrl: ev.recordingUrl ?? '',
     meetingUrl: ev.meetingUrl ?? '',
@@ -209,12 +211,19 @@ onMounted(() => { if (!loading.value && events.value.length === 0 && !loadError.
             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Description *</label>
             <textarea v-model="form.description" required rows="3" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] placeholder-gray-400 focus:outline-none focus:border-[#c2f33d] transition-colors resize-none"></textarea>
           </div>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-3 gap-4">
             <div>
               <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Category *</label>
               <select v-model="form.category" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] focus:outline-none focus:border-[#c2f33d] transition-colors">
                 <option value="basics">Basics</option>
                 <option value="advanced">Advanced</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Idioma *</label>
+              <select v-model="form.language" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] focus:outline-none focus:border-[#c2f33d] transition-colors">
+                <option value="es">Español</option>
+                <option value="en">English</option>
               </select>
             </div>
             <div>

@@ -6,6 +6,7 @@ public record EventDto
     public string Title { get; init; } = "";
     public string Description { get; init; } = "";
     public string Category { get; init; } = "";
+    public string Language { get; init; } = "es";
     public DateTime ScheduledAt { get; init; }
     public string? Speaker { get; init; }
     public string? SpeakerPhotoUrl { get; init; }
@@ -42,6 +43,7 @@ public record EventWriteRequest
     public required string Title { get; init; }
     public required string Description { get; init; }
     public required string Category { get; init; }
+    public string Language { get; init; } = "es";
     public required DateTime ScheduledAt { get; init; }
     public string? Speaker { get; init; }
     public string? SpeakerPhotoUrl { get; init; }

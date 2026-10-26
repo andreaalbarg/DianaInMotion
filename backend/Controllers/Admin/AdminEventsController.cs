@@ -22,6 +22,7 @@ public class AdminEventsController(AppDb db) : ControllerBase
                 Title = e.Title,
                 Description = e.Description,
                 Category = e.Category,
+                Language = e.Language,
                 ScheduledAt = e.ScheduledAt,
                 Speaker = e.Speaker,
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
@@ -45,6 +46,7 @@ public class AdminEventsController(AppDb db) : ControllerBase
             Title = req.Title,
             Description = req.Description,
             Category = req.Category,
+            Language = req.Language,
             ScheduledAt = req.ScheduledAt,
             Speaker = req.Speaker,
             SpeakerPhotoUrl = req.SpeakerPhotoUrl,
@@ -66,6 +68,7 @@ public class AdminEventsController(AppDb db) : ControllerBase
         ev.Title = req.Title;
         ev.Description = req.Description;
         ev.Category = req.Category;
+        ev.Language = req.Language;
         ev.ScheduledAt = req.ScheduledAt;
         ev.Speaker = req.Speaker;
         ev.SpeakerPhotoUrl = req.SpeakerPhotoUrl;
