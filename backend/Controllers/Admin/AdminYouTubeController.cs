@@ -44,8 +44,8 @@ public class AdminYouTubeController(AppDb db, YouTubeService youtube, ILogger<Ad
         if (string.IsNullOrWhiteSpace(req.ApiKey) || string.IsNullOrWhiteSpace(req.ChannelId))
             return BadRequest(new ProblemDetails { Title = "Ingresa el API Key y el ID del canal antes de probar." });
 
-        if (req.ChannelId.StartsWith("http", StringComparison.OrdinalIgnoreCase) || req.ChannelId.Contains('/') || req.ChannelId.Contains('@'))
-            return BadRequest(new ProblemDetails { Title = "El ID del canal no es la URL del canal. Debe empezar con 'UC' (ejemplo: UCxxxxxxxxxxxxxxxx). Lo encuentras en YouTube Studio → Personalización → Información básica del canal." });
+        if (req.ChannelId.StartsWith("http", StringComparison.OrdinalIgnoreCase) || req.ChannelId.Contains('/'))
+            return BadRequest(new ProblemDetails { Title = "Ingresa el ID del canal (empieza con 'UC') o el @handle (ejemplo: @DianaInMotion), no la URL completa." });
 
         try
         {

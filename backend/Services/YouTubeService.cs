@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using dianainmotion.Backend.Infrastructure;
 using dianainmotion.Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -85,11 +86,16 @@ public class YouTubeService(
         string uploadsPlaylistId;
         if (!cache.TryGetValue($"yt_playlist_{channelId}", out string? playlistId))
         {
+            // Support both UC... channel IDs and @handles
+            var channelParam = channelId.StartsWith("@", StringComparison.Ordinal)
+                ? $"forHandle={Uri.EscapeDataString(channelId[1..])}"
+                : $"id={Uri.EscapeDataString(channelId)}";
+
             HttpResponseMessage channelResp;
             try
             {
                 channelResp = await client.GetAsync(
-                    $"channels?part=contentDetails&id={channelId}&key={apiKey}", ct);
+                    $"channels?part=contentDetails&{channelParam}&key={apiKey}", ct);
             }
             catch (Exception ex)
             {
@@ -105,8 +111,8 @@ public class YouTubeService(
                 try
                 {
                     using var errDoc = JsonDocument.Parse(channelJson, JsonOpts);
-                    ytError = errDoc.RootElement
-                        .GetProperty("error").GetProperty("message").GetString() ?? "";
+                    ytError = StripHtml(errDoc.RootElement
+                        .GetProperty("error").GetProperty("message").GetString() ?? "");
                 }
                 catch { }
                 logger.LogWarning("YouTube API error {Status}: {Body}", channelResp.StatusCode, channelJson);
@@ -150,15 +156,17 @@ public class YouTubeService(
             try
             {
                 using var errDoc = JsonDocument.Parse(playlistJson, JsonOpts);
-                ytError = errDoc.RootElement
-                    .GetProperty("error").GetProperty("message").GetString() ?? "";
+                ytError = StripHtml(errDoc.RootElement
+                    .GetProperty("error").GetProperty("message").GetString() ?? "");
             }
             catch { }
             logger.LogWarning("YouTube playlistItems error {Status}: {Body}", playlistResp.StatusCode, playlistJson);
-            throw new InvalidOperationException(
-                string.IsNullOrEmpty(ytError)
-                    ? $"Error al obtener los videos (HTTP {(int)playlistResp.StatusCode}). Verifica el API Key."
-                    : $"YouTube: {ytError}");
+            var playlistErrMsg = string.IsNullOrEmpty(ytError)
+                ? $"Error al obtener los videos (HTTP {(int)playlistResp.StatusCode}). Verifica el API Key."
+                : $"YouTube: {ytError}";
+            if (playlistResp.StatusCode == System.Net.HttpStatusCode.NotFound)
+                playlistErrMsg += " Asegúrate de que el canal tiene videos públicos y de que el ID del canal es correcto.";
+            throw new InvalidOperationException(playlistErrMsg);
         }
 
         using var playlistDoc = JsonDocument.Parse(playlistJson, JsonOpts);
@@ -187,6 +195,8 @@ public class YouTubeService(
             })
             .ToList();
     }
+
+    private static string StripHtml(string s) => Regex.Replace(s, "<[^>]+>", "");
 
     public void ClearCache()
     {

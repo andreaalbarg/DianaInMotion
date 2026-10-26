@@ -87,11 +87,11 @@ async function testConnection() {
         <input
           v-model="channelId"
           type="text"
-          placeholder="UC..."
+          placeholder="UC... o @handle"
           class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#c2f33d]/60"
         />
         <p class="text-white/30 text-xs mt-1">
-          El ID del canal empieza con "UC". Lo encuentras en la URL del canal en YouTube.
+          Ingresa el ID del canal (empieza con "UC") o tu @handle (ej: @DianaInMotion).
         </p>
       </div>
 
