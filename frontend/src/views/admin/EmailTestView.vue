@@ -79,7 +79,7 @@ async function send() {
       </div>
 
       <p v-if="!result" class="text-xs text-gray-400">
-        Requiere una cuenta en <strong>resend.com</strong>. Añade la variable <code class="bg-gray-100 px-1 rounded">Resend__ApiKey</code> al entorno del backend con tu API key.
+        Añade la variable <code class="bg-gray-100 px-1 rounded">MailerDash__ApiKey</code> al entorno del backend con tu API key de MailerDash.
       </p>
     </div>
   </div>

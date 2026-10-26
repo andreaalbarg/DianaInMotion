@@ -1,6 +1,5 @@
 using System.Text;
 using dianainmotion.Backend.Infrastructure;
-using Resend;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -42,11 +41,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddSingleton(new JwtSettings(jwtSecret));
 
-// Resend transactional email (port-free HTTPS API — Smtp__* no longer used)
-builder.Services.AddResend(options =>
-{
-    options.ApiToken = builder.Configuration["Resend:ApiKey"] ?? "";
-});
+// MailerDash transactional email (HTTPS REST API)
+builder.Services.AddHttpClient("mailerdash");
 builder.Services.AddScoped<dianainmotion.Backend.Services.IEmailService, dianainmotion.Backend.Services.EmailService>();
 builder.Services.AddHostedService<dianainmotion.Backend.Services.ReminderBackgroundService>();
 

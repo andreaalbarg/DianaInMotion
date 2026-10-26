@@ -17,7 +17,7 @@ public class AdminEmailTestController(IEmailService emailService) : ControllerBa
             return BadRequest(new ProblemDetails { Title = "Ingresa un correo válido." });
 
         if (!emailService.IsConfigured())
-            return BadRequest(new ProblemDetails { Title = "Resend no configurado. Añade la variable Resend__ApiKey al entorno del backend." });
+            return BadRequest(new ProblemDetails { Title = "MailerDash no configurado. Añade la variable MailerDash__ApiKey al entorno del backend." });
 
         var language = req.Language == "en" ? "en" : "es";
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
@@ -29,11 +29,11 @@ public class AdminEmailTestController(IEmailService emailService) : ControllerBa
         }
         catch (OperationCanceledException)
         {
-            return StatusCode(504, new ProblemDetails { Title = "La API de Resend no respondió en 30 segundos." });
+            return StatusCode(504, new ProblemDetails { Title = "La API de MailerDash no respondió en 30 segundos." });
         }
         catch (Exception ex)
         {
-            return BadRequest(new ProblemDetails { Title = $"Error Resend: {ex.Message}" });
+            return BadRequest(new ProblemDetails { Title = $"Error MailerDash: {ex.Message}" });
         }
     }
 }
