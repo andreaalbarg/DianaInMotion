@@ -52,7 +52,12 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
 {
     if (builder.Environment.IsDevelopment())
     {
-        p.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+        // Allow localhost (local dev) and *.app.sourcecoding.ai (Diana preview)
+        p.SetIsOriginAllowed(origin =>
+         {
+             var host = new Uri(origin).Host;
+             return host == "localhost" || host.EndsWith(".app.sourcecoding.ai");
+         })
          .AllowAnyHeader().AllowAnyMethod().AllowCredentials();
     }
     else

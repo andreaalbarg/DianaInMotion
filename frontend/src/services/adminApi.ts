@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-const adminApi = axios.create({ baseURL: '/api/admin', timeout: 15000 })
+declare const __BACKEND_URL__: string
+const _backendBase = typeof __BACKEND_URL__ !== 'undefined' && __BACKEND_URL__
+  ? __BACKEND_URL__
+  : ''
+const adminApi = axios.create({ baseURL: `${_backendBase}/api/admin`, timeout: 15000 })
 
 adminApi.interceptors.request.use(config => {
   const token = localStorage.getItem('admin_token')
