@@ -147,7 +147,11 @@ static string LoadOrGenerateAdminPassword(string dataDir)
     return pw;
 }
 
-public record AdminSettings(string PasswordHash, string Email);
+public class AdminSettings(string passwordHash, string email)
+{
+    public string PasswordHash { get; set; } = passwordHash;
+    public string Email { get; } = email;
+}
 public record JwtSettings(string Secret);
 
 public class AdminResetTokenStore

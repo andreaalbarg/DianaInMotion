@@ -69,7 +69,7 @@ public class AuthController(
             return BadRequest(new ProblemDetails { Title = "La contraseña debe tener al menos 8 caracteres." });
 
         var newHash = BCrypt.Net.BCrypt.HashPassword(req.NewPassword);
-        adminSettings = adminSettings with { PasswordHash = newHash };
+        adminSettings.PasswordHash = newHash;
         tokenStore.Consume();
 
         // Persist new password so it survives restarts
