@@ -9,4 +9,5 @@ export interface Event {
   recordingUrl: string | null
   isPast: boolean
   registrationCount: number
+  language: string
 }

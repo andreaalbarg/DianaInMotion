@@ -58,12 +58,20 @@ function youtubeId(url: string | null): string | null {
     <!-- Card body -->
     <div class="p-6 flex flex-col gap-4 flex-1">
 
-      <!-- Category -->
-      <div class="flex flex-col gap-1">
-        <p class="text-xs font-mono uppercase tracking-widest text-gray-400">
-          {{ event.category === 'basics' ? 'Basics' : 'Advanced' }}
-        </p>
-        <span v-if="!event.isPast && daysUntil(event.scheduledAt) <= 14" class="text-xs font-mono text-[#c2f33d] bg-[#231f20] px-2 py-0.5 self-start">
+      <!-- Category + Language -->
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <p class="text-xs font-mono uppercase tracking-widest text-gray-400">
+            {{ event.category === 'basics' ? 'Basics' : 'Advanced' }}
+          </p>
+          <span class="text-xs font-mono uppercase tracking-widest px-2 py-0.5 border"
+            :class="event.language === 'en'
+              ? 'border-blue-200 text-blue-500'
+              : 'border-orange-200 text-orange-500'">
+            {{ event.language === 'en' ? 'EN' : 'ES' }}
+          </span>
+        </div>
+        <span v-if="!event.isPast && daysUntil(event.scheduledAt) <= 14" class="text-xs font-mono text-[#c2f33d] bg-[#231f20] px-2 py-0.5">
           In {{ daysUntil(event.scheduledAt) }}d
         </span>
       </div>
