@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import {
   fetchYouTubeSettings,
   saveYouTubeSettings,
-  previewYouTubeVideos,
+  testYouTubeConnection,
   type YouTubeVideoPreview,
 } from '../../services/adminApi'
 
@@ -45,7 +45,7 @@ async function testConnection() {
   previewError.value = ''
   videos.value = []
   try {
-    videos.value = await previewYouTubeVideos()
+    videos.value = await testYouTubeConnection({ apiKey: apiKey.value, channelId: channelId.value })
   } catch (e: any) {
     previewError.value = e?.response?.data?.title ?? e?.message ?? 'Error al conectar con YouTube.'
   } finally {

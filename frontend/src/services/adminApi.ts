@@ -121,7 +121,7 @@ export async function saveYouTubeSettings(settings: YouTubeSettings): Promise<vo
   await adminApi.put('/youtube', settings)
 }
 
-export async function previewYouTubeVideos(): Promise<YouTubeVideoPreview[]> {
-  const { data } = await adminApi.get<YouTubeVideoPreview[]>('/youtube/preview')
+export async function testYouTubeConnection(settings: YouTubeSettings): Promise<YouTubeVideoPreview[]> {
+  const { data } = await adminApi.post<YouTubeVideoPreview[]>('/youtube/test', settings)
   return data
 }

@@ -48,8 +48,13 @@ public class YouTubeService(
         if (cache.TryGetValue("youtube_latest", out List<EventDto>? cached))
             return cached;
 
-        var previews = await FetchPreviewsAsync(apiKey, channelId, ct);
-        if (previews is null) return null;
+        List<YouTubeVideoPreview> previews;
+        try { previews = await FetchPreviewsAsync(apiKey, channelId, ct); }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "YouTube fetch failed, falling back to DB featured events.");
+            return null;
+        }
 
         var videos = previews.Select(p => new EventDto
         {
@@ -70,64 +75,89 @@ public class YouTubeService(
 
     /// <summary>
     /// Fetches video previews directly (bypasses cache) for admin testing.
+    /// Throws <see cref="InvalidOperationException"/> with a user-facing message on failure.
     /// </summary>
-    public async Task<List<YouTubeVideoPreview>?> FetchPreviewsAsync(
+    public async Task<List<YouTubeVideoPreview>> FetchPreviewsAsync(
         string apiKey, string channelId, CancellationToken ct)
     {
-        try
-        {
-            var client = httpClientFactory.CreateClient("youtube");
+        var client = httpClientFactory.CreateClient("youtube");
 
-            string uploadsPlaylistId;
-            if (!cache.TryGetValue($"yt_playlist_{channelId}", out string? playlistId))
+        string uploadsPlaylistId;
+        if (!cache.TryGetValue($"yt_playlist_{channelId}", out string? playlistId))
+        {
+            HttpResponseMessage channelResp;
+            try
             {
-                var channelJson = await client.GetStringAsync(
+                channelResp = await client.GetAsync(
                     $"channels?part=contentDetails&id={channelId}&key={apiKey}", ct);
-                using var channelDoc = JsonDocument.Parse(channelJson, JsonOpts);
-                var items = channelDoc.RootElement.GetProperty("items");
-                if (items.GetArrayLength() == 0) return null;
-                playlistId = items[0]
-                    .GetProperty("contentDetails")
-                    .GetProperty("relatedPlaylists")
-                    .GetProperty("uploads")
-                    .GetString()!;
-                cache.Set($"yt_playlist_{channelId}", playlistId, TimeSpan.FromDays(7));
             }
-            uploadsPlaylistId = playlistId!;
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex, "YouTube channels request failed.");
+                throw new InvalidOperationException("No se pudo conectar con YouTube. Verifica tu conexión a Internet.");
+            }
 
-            var playlistJson = await client.GetStringAsync(
-                $"playlistItems?part=snippet&maxResults=3&playlistId={uploadsPlaylistId}&key={apiKey}", ct);
-            using var playlistDoc = JsonDocument.Parse(playlistJson, JsonOpts);
-
-            return playlistDoc.RootElement
-                .GetProperty("items")
-                .EnumerateArray()
-                .Select(item =>
+            var channelJson = await channelResp.Content.ReadAsStringAsync(ct);
+            if (!channelResp.IsSuccessStatusCode)
+            {
+                // Extract YouTube's error message if available
+                var ytError = "";
+                try
                 {
-                    var snippet = item.GetProperty("snippet");
-                    var videoId = snippet.GetProperty("resourceId").GetProperty("videoId").GetString()!;
-                    var title = snippet.GetProperty("title").GetString() ?? "";
-                    var thumbnail = snippet.TryGetProperty("thumbnails", out var thumbs)
-                        && thumbs.TryGetProperty("medium", out var medium)
-                        && medium.TryGetProperty("url", out var url)
-                        ? url.GetString() ?? ""
-                        : "";
+                    using var errDoc = JsonDocument.Parse(channelJson, JsonOpts);
+                    ytError = errDoc.RootElement
+                        .GetProperty("error").GetProperty("message").GetString() ?? "";
+                }
+                catch { }
+                logger.LogWarning("YouTube API error {Status}: {Body}", channelResp.StatusCode, channelJson);
+                throw new InvalidOperationException(
+                    string.IsNullOrEmpty(ytError)
+                        ? $"YouTube rechazó la solicitud (HTTP {(int)channelResp.StatusCode}). Verifica el API Key."
+                        : $"YouTube: {ytError}");
+            }
 
-                    return new YouTubeVideoPreview
-                    {
-                        VideoId = videoId,
-                        Title = title,
-                        ThumbnailUrl = thumbnail,
-                        Url = $"https://www.youtube.com/watch?v={videoId}",
-                    };
-                })
-                .ToList();
+            using var channelDoc = JsonDocument.Parse(channelJson, JsonOpts);
+            var items = channelDoc.RootElement.GetProperty("items");
+            if (items.GetArrayLength() == 0)
+                throw new InvalidOperationException(
+                    "No se encontró el canal. Asegúrate de usar el ID del canal (empieza con 'UC'), no el nombre o @handle.");
+
+            playlistId = items[0]
+                .GetProperty("contentDetails")
+                .GetProperty("relatedPlaylists")
+                .GetProperty("uploads")
+                .GetString()!;
+            cache.Set($"yt_playlist_{channelId}", playlistId, TimeSpan.FromDays(7));
         }
-        catch (Exception ex)
-        {
-            logger.LogWarning(ex, "YouTube fetch failed.");
-            return null;
-        }
+        uploadsPlaylistId = playlistId!;
+
+        var playlistJson = await client.GetStringAsync(
+            $"playlistItems?part=snippet&maxResults=3&playlistId={uploadsPlaylistId}&key={apiKey}", ct);
+        using var playlistDoc = JsonDocument.Parse(playlistJson, JsonOpts);
+
+        return playlistDoc.RootElement
+            .GetProperty("items")
+            .EnumerateArray()
+            .Select(item =>
+            {
+                var snippet = item.GetProperty("snippet");
+                var videoId = snippet.GetProperty("resourceId").GetProperty("videoId").GetString()!;
+                var title = snippet.GetProperty("title").GetString() ?? "";
+                var thumbnail = snippet.TryGetProperty("thumbnails", out var thumbs)
+                    && thumbs.TryGetProperty("medium", out var medium)
+                    && medium.TryGetProperty("url", out var url)
+                    ? url.GetString() ?? ""
+                    : "";
+
+                return new YouTubeVideoPreview
+                {
+                    VideoId = videoId,
+                    Title = title,
+                    ThumbnailUrl = thumbnail,
+                    Url = $"https://www.youtube.com/watch?v={videoId}",
+                };
+            })
+            .ToList();
     }
 
     public void ClearCache()

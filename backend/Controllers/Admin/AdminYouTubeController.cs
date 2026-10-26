@@ -38,27 +38,21 @@ public class AdminYouTubeController(AppDb db, YouTubeService youtube) : Controll
         return NoContent();
     }
 
-    [HttpGet("preview")]
-    public async Task<IActionResult> Preview(CancellationToken ct)
+    [HttpPost("test")]
+    public async Task<IActionResult> Test([FromBody] YouTubeSettingsWriteRequest req, CancellationToken ct)
     {
-        var apiKey = await db.AppSettings
-            .Where(s => s.Key == "YouTube:ApiKey")
-            .Select(s => s.Value)
-            .FirstOrDefaultAsync(ct) ?? "";
+        if (string.IsNullOrWhiteSpace(req.ApiKey) || string.IsNullOrWhiteSpace(req.ChannelId))
+            return BadRequest(new ProblemDetails { Title = "Ingresa el API Key y el ID del canal antes de probar." });
 
-        var channelId = await db.AppSettings
-            .Where(s => s.Key == "YouTube:ChannelId")
-            .Select(s => s.Value)
-            .FirstOrDefaultAsync(ct) ?? "";
-
-        if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(channelId))
-            return BadRequest(new ProblemDetails { Title = "YouTube no está configurado." });
-
-        var videos = await youtube.FetchPreviewsAsync(apiKey, channelId, ct);
-        if (videos is null)
-            return BadRequest(new ProblemDetails { Title = "No se pudo conectar con YouTube. Verifica el API Key y el Canal." });
-
-        return Ok(videos);
+        try
+        {
+            var videos = await youtube.FetchPreviewsAsync(req.ApiKey, req.ChannelId, ct);
+            return Ok(videos);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new ProblemDetails { Title = ex.Message });
+        }
     }
 
     private async Task Upsert(string key, string value, CancellationToken ct)
