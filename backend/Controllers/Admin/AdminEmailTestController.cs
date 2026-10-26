@@ -30,9 +30,10 @@ public class AdminEmailTestController(IEmailService emailService, IConfiguration
         const string fakeTitle = "Getting Started with Diana in Motion";
         const string fakeMeeting = "https://zoom.us/j/123456789";
 
-        await emailService.SendConfirmationAsync(req.To, req.Name ?? req.To, fakeTitle, fakeDate, fakeMeeting, language, ct);
+        // Fire-and-forget — SMTP puede tardar varios segundos en conectar
+        _ = emailService.SendConfirmationAsync(req.To, req.Name ?? req.To, fakeTitle, fakeDate, fakeMeeting, language, CancellationToken.None);
 
-        return Ok(new { message = $"Correo de prueba enviado a {req.To}. Revisa tu bandeja de entrada (y spam)." });
+        return Ok(new { message = $"Solicitud enviada a {req.To}. Revisa tu bandeja en 1-2 minutos (incluyendo spam)." });
     }
 }
 

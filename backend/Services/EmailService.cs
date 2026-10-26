@@ -67,7 +67,7 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
         message.Subject = subject;
         message.Body = new BodyBuilder { HtmlBody = htmlBody }.ToMessageBody();
 
-        using var client = new SmtpClient();
+        using var client = new SmtpClient { Timeout = 15000 };
         try
         {
             await client.ConnectAsync(cfg.Host, cfg.Port, SecureSocketOptions.Auto, ct);
