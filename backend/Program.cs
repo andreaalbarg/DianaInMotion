@@ -18,13 +18,15 @@ builder.Services.AddDbContext<AppDb>(o => o
 
 // Admin credentials
 var adminPassword = builder.Configuration["Admin:Password"]
-    ?? throw new InvalidOperationException("Admin:Password not configured");
+    is { Length: > 0 } ap ? ap
+    : throw new InvalidOperationException("Admin:Password not configured");
 var adminPasswordHash = BCrypt.Net.BCrypt.HashPassword(adminPassword);
 builder.Services.AddSingleton(new AdminSettings(adminPasswordHash));
 
 // JWT
 var jwtSecret = builder.Configuration["Jwt:Secret"]
-    ?? throw new InvalidOperationException("Jwt:Secret not configured");
+    is { Length: > 0 } js ? js
+    : throw new InvalidOperationException("Jwt:Secret not configured");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>
     {
