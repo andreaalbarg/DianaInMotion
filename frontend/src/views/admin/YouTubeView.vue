@@ -60,45 +60,45 @@ async function testConnection() {
 <template>
   <div class="max-w-2xl">
     <h1 class="text-2xl font-bold mb-2">Canal de YouTube</h1>
-    <p class="text-white/50 text-sm mb-8">
+    <p class="text-gray-500 text-sm mb-8">
       Configura el canal de YouTube para mostrar automáticamente los últimos 3 videos en la sección
       de Past Sessions de la página.
     </p>
 
-    <div class="bg-white/5 border border-white/10 rounded-xl p-6 space-y-5 mb-6">
+    <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-5 mb-6 shadow-sm">
       <div>
-        <label class="block text-sm font-medium text-white/70 mb-1.5">YouTube API Key</label>
+        <label class="block text-sm font-medium text-gray-600 mb-1.5">YouTube API Key</label>
         <input
           v-model="apiKey"
           type="password"
           placeholder="AIza..."
-          class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#c2f33d]/60"
+          class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-[#231f20] placeholder:text-gray-400 focus:outline-none focus:border-[#c2f33d] transition-colors"
         />
-        <p class="text-white/30 text-xs mt-1">
+        <p class="text-gray-400 text-xs mt-1">
           Crea una API Key en
           <a
             href="https://console.cloud.google.com/apis/credentials"
             target="_blank"
-            class="text-[#c2f33d]/70 hover:text-[#c2f33d]"
+            class="text-[#c2f33d] hover:underline"
           >Google Cloud Console</a>
           con acceso a la YouTube Data API v3.
         </p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-white/70 mb-1.5">ID del Canal</label>
+        <label class="block text-sm font-medium text-gray-600 mb-1.5">ID del Canal</label>
         <input
           v-model="channelId"
           type="text"
           placeholder="UC... o @handle"
-          class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#c2f33d]/60"
+          class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-[#231f20] placeholder:text-gray-400 focus:outline-none focus:border-[#c2f33d] transition-colors"
         />
-        <p class="text-white/30 text-xs mt-1">
+        <p class="text-gray-400 text-xs mt-1">
           Ingresa el ID del canal (empieza con "UC") o tu @handle (ej: @DianaInMotion).
         </p>
       </div>
 
-      <div v-if="saveError" class="text-red-400 text-sm bg-red-900/20 rounded-lg px-4 py-2.5">
+      <div v-if="saveError" class="text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg px-4 py-2.5">
         {{ saveError }}
       </div>
 
@@ -121,16 +121,16 @@ async function testConnection() {
     </div>
 
     <!-- Preview -->
-    <div v-if="previewError" class="text-red-400 text-sm bg-red-900/20 rounded-lg px-4 py-3 mb-6">
+    <div v-if="previewError" class="text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-6">
       {{ previewError }}
     </div>
 
-    <div v-if="previewOk && videos.length === 0" class="text-[#c2f33d]/80 text-sm bg-[#c2f33d]/10 rounded-lg px-4 py-3 mb-6">
+    <div v-if="previewOk && videos.length === 0" class="text-green-700 text-sm bg-green-50 border border-green-200 rounded-lg px-4 py-3 mb-6">
       Conexión exitosa. El canal aún no tiene videos públicos — aparecerán automáticamente en Past Sessions en cuanto se publique el primero.
     </div>
 
     <div v-if="videos.length > 0">
-      <h2 class="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">
+      <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
         Últimos videos del canal
       </h2>
       <div class="grid grid-cols-1 gap-4">
@@ -139,7 +139,7 @@ async function testConnection() {
           :key="v.videoId"
           :href="v.url"
           target="_blank"
-          class="flex gap-4 bg-white/5 border border-white/10 rounded-xl p-4 hover:border-white/20 transition-colors"
+          class="flex gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 shadow-sm transition-colors"
         >
           <img
             v-if="v.thumbnailUrl"
@@ -148,12 +148,12 @@ async function testConnection() {
             class="w-32 h-18 object-cover rounded-lg flex-shrink-0"
           />
           <div class="min-w-0">
-            <div class="text-sm font-medium text-white line-clamp-2">{{ v.title }}</div>
-            <div class="text-xs text-[#c2f33d]/70 mt-1">Ver en YouTube ↗</div>
+            <div class="text-sm font-medium text-[#231f20] line-clamp-2">{{ v.title }}</div>
+            <div class="text-xs text-[#c2f33d] mt-1">Ver en YouTube ↗</div>
           </div>
         </a>
       </div>
-      <p class="text-white/30 text-xs mt-4">
+      <p class="text-gray-400 text-xs mt-4">
         Estos videos se mostrarán automáticamente en la sección de Past Sessions (se actualizan cada hora).
       </p>
     </div>

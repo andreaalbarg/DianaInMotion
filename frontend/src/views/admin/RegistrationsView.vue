@@ -37,19 +37,19 @@ load()
       <select
         v-model="selectedEventId"
         @change="load"
-        class="bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-[#c2f33d] transition-colors"
+        class="bg-white border border-gray-300 rounded-lg px-4 py-2 text-[#231f20] text-sm focus:outline-none focus:border-[#c2f33d] transition-colors"
       >
         <option value="">All events</option>
         <option v-for="ev in events" :key="ev.id" :value="ev.id">{{ ev.title }}</option>
       </select>
     </div>
 
-    <div v-if="loading" class="text-white/40">Loading…</div>
+    <div v-if="loading" class="text-gray-400">Loading…</div>
 
-    <div v-else class="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+    <div v-else class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
       <table class="w-full text-sm">
         <thead>
-          <tr class="border-b border-white/10 text-white/40 text-xs uppercase tracking-wider">
+          <tr class="border-b border-gray-200 text-gray-400 text-xs uppercase tracking-wider bg-gray-50">
             <th class="text-left px-5 py-3">Name</th>
             <th class="text-left px-5 py-3">Email</th>
             <th class="text-left px-5 py-3">Event</th>
@@ -60,18 +60,18 @@ load()
           <tr
             v-for="r in registrations"
             :key="r.id"
-            class="border-b border-white/5 hover:bg-white/5 transition-colors"
+            class="border-b border-gray-100 hover:bg-gray-50 transition-colors"
           >
-            <td class="px-5 py-3 font-medium">{{ r.name }}</td>
-            <td class="px-5 py-3 text-white/60">{{ r.email }}</td>
-            <td class="px-5 py-3 text-white/60">{{ r.eventTitle }}</td>
-            <td class="px-5 py-3 text-white/40 text-xs">{{ formatDate(r.registeredAt) }}</td>
+            <td class="px-5 py-3 font-medium text-[#231f20]">{{ r.name }}</td>
+            <td class="px-5 py-3 text-gray-500">{{ r.email }}</td>
+            <td class="px-5 py-3 text-gray-500">{{ r.eventTitle }}</td>
+            <td class="px-5 py-3 text-gray-400 text-xs">{{ formatDate(r.registeredAt) }}</td>
           </tr>
         </tbody>
       </table>
-      <div v-if="registrations.length === 0" class="px-5 py-8 text-center text-white/40">No registrations.</div>
+      <div v-if="registrations.length === 0" class="px-5 py-8 text-center text-gray-400">No registrations.</div>
     </div>
 
-    <div class="mt-3 text-sm text-white/40">{{ registrations.length }} registrations</div>
+    <div class="mt-3 text-sm text-gray-400">{{ registrations.length }} registrations</div>
   </div>
 </template>

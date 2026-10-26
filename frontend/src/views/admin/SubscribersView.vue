@@ -35,12 +35,12 @@ load()
       <h1 class="text-2xl font-black">Newsletter Subscribers</h1>
     </div>
 
-    <div v-if="loading" class="text-white/40">Loading…</div>
+    <div v-if="loading" class="text-gray-400">Loading…</div>
 
-    <div v-else class="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+    <div v-else class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
       <table class="w-full text-sm">
         <thead>
-          <tr class="border-b border-white/10 text-white/40 text-xs uppercase tracking-wider">
+          <tr class="border-b border-gray-200 text-gray-400 text-xs uppercase tracking-wider bg-gray-50">
             <th class="text-left px-5 py-3">Email</th>
             <th class="text-left px-5 py-3">Subscribed</th>
             <th class="text-right px-5 py-3"></th>
@@ -50,19 +50,19 @@ load()
           <tr
             v-for="s in subscribers"
             :key="s.id"
-            class="border-b border-white/5 hover:bg-white/5 transition-colors"
+            class="border-b border-gray-100 hover:bg-gray-50 transition-colors"
           >
-            <td class="px-5 py-3 font-medium">{{ s.email }}</td>
-            <td class="px-5 py-3 text-white/40 text-xs">{{ formatDate(s.subscribedAt) }}</td>
+            <td class="px-5 py-3 font-medium text-[#231f20]">{{ s.email }}</td>
+            <td class="px-5 py-3 text-gray-400 text-xs">{{ formatDate(s.subscribedAt) }}</td>
             <td class="px-5 py-3 text-right">
-              <button @click="remove(s.id, s.email)" class="text-red-400/60 hover:text-red-400 transition-colors text-xs">Remove</button>
+              <button @click="remove(s.id, s.email)" class="text-red-400/60 hover:text-red-500 transition-colors text-xs">Remove</button>
             </td>
           </tr>
         </tbody>
       </table>
-      <div v-if="subscribers.length === 0" class="px-5 py-8 text-center text-white/40">No subscribers yet.</div>
+      <div v-if="subscribers.length === 0" class="px-5 py-8 text-center text-gray-400">No subscribers yet.</div>
     </div>
 
-    <div class="mt-3 text-sm text-white/40">{{ subscribers.length }} subscribers</div>
+    <div class="mt-3 text-sm text-gray-400">{{ subscribers.length }} subscribers</div>
   </div>
 </template>

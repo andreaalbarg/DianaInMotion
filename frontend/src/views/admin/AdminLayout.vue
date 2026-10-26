@@ -20,11 +20,11 @@ const navItems = [
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#231f20] text-white">
-    <aside class="fixed top-0 left-0 h-full w-56 bg-black/40 border-r border-white/10 flex flex-col">
-      <div class="p-6 border-b border-white/10">
-        <div class="text-lg font-black tracking-tight">DIANA</div>
-        <div class="text-xs text-white/40 font-semibold tracking-widest">IN MOTION</div>
+  <div class="min-h-screen bg-white text-[#231f20]">
+    <aside class="fixed top-0 left-0 h-full w-56 bg-gray-50 border-r border-gray-200 flex flex-col">
+      <div class="p-6 border-b border-gray-200">
+        <div class="text-lg font-black tracking-tight text-[#231f20]">DIANA</div>
+        <div class="text-xs text-gray-400 font-semibold tracking-widest">IN MOTION</div>
       </div>
       <nav class="flex-1 p-4 space-y-1">
         <RouterLink
@@ -34,15 +34,15 @@ const navItems = [
           class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
           :class="route.path === item.to
             ? 'bg-[#c2f33d] text-[#231f20]'
-            : 'text-white/60 hover:text-white hover:bg-white/5'"
+            : 'text-gray-500 hover:text-[#231f20] hover:bg-gray-100'"
         >
           {{ item.label }}
         </RouterLink>
       </nav>
-      <div class="p-4 border-t border-white/10">
+      <div class="p-4 border-t border-gray-200">
         <button
           @click="logout"
-          class="w-full text-left px-4 py-2.5 text-sm text-white/40 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+          class="w-full text-left px-4 py-2.5 text-sm text-gray-400 hover:text-[#231f20] rounded-lg hover:bg-gray-100 transition-colors"
         >
           Sign out
         </button>
