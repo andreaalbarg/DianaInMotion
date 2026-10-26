@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { fetchSubscribers, deleteSubscriber, type Subscriber } from '../../services/adminApi'
 
 const subscribers = ref<Subscriber[]>([])
-const loading = ref(true)
+const loading = ref(false)
 
 async function load() {
   loading.value = true
@@ -26,7 +26,7 @@ function formatDate(d: string) {
   })
 }
 
-onMounted(load)
+load()
 </script>
 
 <template>

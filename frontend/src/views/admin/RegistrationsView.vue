@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { fetchRegistrations, fetchAdminEvents, type Registration, type AdminEvent } from '../../services/adminApi'
 
 const registrations = ref<Registration[]>([])
 const events = ref<AdminEvent[]>([])
 const selectedEventId = ref('')
-const loading = ref(true)
+const loading = ref(false)
 
 async function load() {
   loading.value = true
@@ -27,7 +27,7 @@ function formatDate(d: string) {
   })
 }
 
-onMounted(load)
+load()
 </script>
 
 <template>

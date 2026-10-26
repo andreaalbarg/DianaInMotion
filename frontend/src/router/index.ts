@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAdminAuthStore } from '../stores/adminAuth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -26,13 +25,11 @@ const router = createRouter({
   ],
 })
 
+// Read directly from localStorage — avoids Pinia initialization race in the guard
 router.beforeEach((to, _from, next) => {
-  if (to.meta.requiresAuth) {
-    const auth = useAdminAuthStore()
-    if (!auth.isAuthenticated) {
-      next('/admin/login')
-      return
-    }
+  if (to.meta.requiresAuth && !localStorage.getItem('admin_token')) {
+    next('/admin/login')
+    return
   }
   next()
 })

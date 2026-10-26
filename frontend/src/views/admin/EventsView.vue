@@ -11,7 +11,7 @@ import {
 } from '../../services/adminApi'
 
 const events = ref<AdminEvent[]>([])
-const loading = ref(true)
+const loading = ref(false)
 const loadError = ref('')
 const featuredCount = computed(() => events.value.filter(e => e.isPast && e.isFeatured).length)
 const showForm = ref(false)
@@ -108,7 +108,8 @@ function formatDate(d: string) {
   })
 }
 
-onMounted(load)
+load()
+onMounted(() => { if (!loading.value && events.value.length === 0 && !loadError.value) load() })
 </script>
 
 <template>
