@@ -10,7 +10,7 @@ namespace dianainmotion.Backend.Controllers.Admin;
 [ApiController]
 [Route("api/admin/youtube")]
 [Authorize]
-public class AdminYouTubeController(AppDb db, YouTubeService youtube) : ControllerBase
+public class AdminYouTubeController(AppDb db, YouTubeService youtube, ILogger<AdminYouTubeController> logger) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetSettings(CancellationToken ct)
@@ -44,6 +44,9 @@ public class AdminYouTubeController(AppDb db, YouTubeService youtube) : Controll
         if (string.IsNullOrWhiteSpace(req.ApiKey) || string.IsNullOrWhiteSpace(req.ChannelId))
             return BadRequest(new ProblemDetails { Title = "Ingresa el API Key y el ID del canal antes de probar." });
 
+        if (req.ChannelId.StartsWith("http", StringComparison.OrdinalIgnoreCase) || req.ChannelId.Contains('/') || req.ChannelId.Contains('@'))
+            return BadRequest(new ProblemDetails { Title = "El ID del canal no es la URL del canal. Debe empezar con 'UC' (ejemplo: UCxxxxxxxxxxxxxxxx). Lo encuentras en YouTube Studio → Personalización → Información básica del canal." });
+
         try
         {
             var videos = await youtube.FetchPreviewsAsync(req.ApiKey, req.ChannelId, ct);
@@ -52,6 +55,11 @@ public class AdminYouTubeController(AppDb db, YouTubeService youtube) : Controll
         catch (InvalidOperationException ex)
         {
             return BadRequest(new ProblemDetails { Title = ex.Message });
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            logger.LogError(ex, "Unexpected error testing YouTube connection.");
+            return BadRequest(new ProblemDetails { Title = "Error inesperado al conectar con YouTube. Verifica el API Key y el ID del canal." });
         }
     }
 
