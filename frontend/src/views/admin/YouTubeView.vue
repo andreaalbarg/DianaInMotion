@@ -15,6 +15,7 @@ const saveOk = ref(false)
 
 const previewing = ref(false)
 const previewError = ref('')
+const previewOk = ref(false)
 const videos = ref<YouTubeVideoPreview[]>([])
 
 onMounted(async () => {
@@ -43,9 +44,11 @@ async function save() {
 async function testConnection() {
   previewing.value = true
   previewError.value = ''
+  previewOk.value = false
   videos.value = []
   try {
     videos.value = await testYouTubeConnection({ apiKey: apiKey.value, channelId: channelId.value })
+    previewOk.value = true
   } catch (e: any) {
     previewError.value = e?.response?.data?.title ?? e?.message ?? 'Error al conectar con YouTube.'
   } finally {
@@ -120,6 +123,10 @@ async function testConnection() {
     <!-- Preview -->
     <div v-if="previewError" class="text-red-400 text-sm bg-red-900/20 rounded-lg px-4 py-3 mb-6">
       {{ previewError }}
+    </div>
+
+    <div v-if="previewOk && videos.length === 0" class="text-[#c2f33d]/80 text-sm bg-[#c2f33d]/10 rounded-lg px-4 py-3 mb-6">
+      Conexión exitosa. El canal aún no tiene videos públicos — aparecerán automáticamente en Past Sessions en cuanto se publique el primero.
     </div>
 
     <div v-if="videos.length > 0">

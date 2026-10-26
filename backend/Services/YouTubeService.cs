@@ -161,11 +161,13 @@ public class YouTubeService(
             }
             catch { }
             logger.LogWarning("YouTube playlistItems error {Status}: {Body}", playlistResp.StatusCode, playlistJson);
+            // 404 on playlistItems means the uploads playlist exists but has no public videos yet — not an error
+            if (playlistResp.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return [];
+
             var playlistErrMsg = string.IsNullOrEmpty(ytError)
                 ? $"Error al obtener los videos (HTTP {(int)playlistResp.StatusCode}). Verifica el API Key."
                 : $"YouTube: {ytError}";
-            if (playlistResp.StatusCode == System.Net.HttpStatusCode.NotFound)
-                playlistErrMsg += " Asegúrate de que el canal tiene videos públicos y de que el ID del canal es correcto.";
             throw new InvalidOperationException(playlistErrMsg);
         }
 
