@@ -89,11 +89,13 @@ if (!string.IsNullOrEmpty(pathBase)) app.UsePathBase(pathBase);
 using (var scope = app.Services.CreateScope())
     scope.ServiceProvider.GetRequiredService<AppDb>().Database.Migrate();
 
-// Write our port to a discovery file so the Vite dev proxy can find us
-// regardless of which port Diana allocates (env vars injected into the
-// frontend process can lag or belong to another project's session).
-var aspNetUrls = Environment.GetEnvironmentVariable("ASPNETCORE_URLS") ?? "";
-if (!string.IsNullOrEmpty(aspNetUrls) && Uri.TryCreate(aspNetUrls.Split(';')[0].Trim(), UriKind.Absolute, out var listenUri))
+// Write our port to a discovery file so the Vite dev proxy can find us.
+// Diana passes --urls as a CLI arg which takes precedence over ASPNETCORE_URLS;
+// read app.Configuration["urls"] (which maps --urls) first, then fall back.
+var boundUrls = app.Configuration["urls"]
+    ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
+    ?? "";
+if (!string.IsNullOrEmpty(boundUrls) && Uri.TryCreate(boundUrls.Split(';')[0].Trim(), UriKind.Absolute, out var listenUri))
     File.WriteAllText(Path.Combine(Path.GetTempPath(), "diana_dianainmotion_backend"), $"http://localhost:{listenUri.Port}");
 
 app.UseSwagger();
