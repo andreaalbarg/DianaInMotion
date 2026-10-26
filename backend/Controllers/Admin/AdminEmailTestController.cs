@@ -8,7 +8,7 @@ namespace dianainmotion.Backend.Controllers.Admin;
 [ApiController]
 [Route("api/admin/email-test")]
 [Authorize(Roles = "Admin")]
-public class AdminEmailTestController(IEmailService emailService, IConfiguration config) : ControllerBase
+public class AdminEmailTestController(IEmailService emailService) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Send([FromBody] EmailTestRequest req, CancellationToken ct)
@@ -17,13 +17,7 @@ public class AdminEmailTestController(IEmailService emailService, IConfiguration
             return BadRequest(new ProblemDetails { Title = "Ingresa un correo válido." });
 
         if (!emailService.IsConfigured())
-        {
-            var detected = config["Smtp:Host"];
-            var msg = string.IsNullOrWhiteSpace(detected)
-                ? "SMTP no configurado. El app no detecta ningún valor en Smtp__Host."
-                : $"SMTP no configurado correctamente. Smtp__Host detectado: '{detected}' — verifica que sea un host válido.";
-            return BadRequest(new ProblemDetails { Title = msg });
-        }
+            return BadRequest(new ProblemDetails { Title = "Resend no configurado. Añade la variable Resend__ApiKey al entorno del backend." });
 
         var language = req.Language == "en" ? "en" : "es";
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
@@ -35,11 +29,11 @@ public class AdminEmailTestController(IEmailService emailService, IConfiguration
         }
         catch (OperationCanceledException)
         {
-            return StatusCode(504, new ProblemDetails { Title = "El servidor SMTP no respondió en 30 segundos. Verifica host y puerto." });
+            return StatusCode(504, new ProblemDetails { Title = "La API de Resend no respondió en 30 segundos." });
         }
         catch (Exception ex)
         {
-            return BadRequest(new ProblemDetails { Title = $"Error SMTP: {ex.Message}" });
+            return BadRequest(new ProblemDetails { Title = $"Error Resend: {ex.Message}" });
         }
     }
 }

@@ -1,6 +1,4 @@
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
+using Resend;
 
 namespace dianainmotion.Backend.Services;
 
@@ -13,88 +11,52 @@ public interface IEmailService
     Task SendTestAsync(string toEmail, string toName, string language, CancellationToken ct);
 }
 
-public class EmailService(IConfiguration config, ILogger<EmailService> logger) : IEmailService
+public class EmailService(IResend resend, IConfiguration config, ILogger<EmailService> logger) : IEmailService
 {
-    private record SmtpConfig(string Host, int Port, string Username, string Password, string FromEmail, string FromName);
+    private string FromAddress => config["Resend:From"] is { Length: > 0 } f ? f : "Diana in Motion <onboarding@resend.dev>";
 
-    public bool IsConfigured() => !string.IsNullOrWhiteSpace(config["Smtp:Host"]);
-
-    private SmtpConfig? GetConfig()
-    {
-        var host = config["Smtp:Host"];
-        if (string.IsNullOrWhiteSpace(host)) return null;
-        return new SmtpConfig(
-            host,
-            int.TryParse(config["Smtp:Port"], out var port) ? port : 587,
-            config["Smtp:Username"] ?? "",
-            config["Smtp:Password"] ?? "",
-            config["Smtp:FromEmail"] is { Length: > 0 } fe ? fe : config["Smtp:Username"] ?? "",
-            config["Smtp:FromName"] is { Length: > 0 } fn ? fn : "Diana in Motion"
-        );
-    }
+    public bool IsConfigured() => !string.IsNullOrWhiteSpace(config["Resend:ApiKey"]);
 
     public async Task SendConfirmationAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct)
     {
-        var cfg = GetConfig();
-        if (cfg is null)
-        {
-            logger.LogWarning("SMTP not configured. Skipping confirmation email to {Email}.", toEmail);
-            return;
-        }
+        if (!IsConfigured()) { logger.LogWarning("Resend not configured. Skipping confirmation email to {Email}.", toEmail); return; }
         var es = language != "en";
-        var subject = es ? $"¡Registro confirmado! – {eventTitle}" : $"Registration confirmed! – {eventTitle}";
-        var body = BuildConfirmationBody(toName, eventTitle, scheduledAt, meetingUrl, es);
-        await SendAsync(cfg, toEmail, toName, subject, body, ct);
+        await SendAsync(toEmail, es ? $"¡Registro confirmado! – {eventTitle}" : $"Registration confirmed! – {eventTitle}",
+            BuildConfirmationBody(toName, eventTitle, scheduledAt, meetingUrl, es), ct);
     }
 
     public async Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct)
     {
-        var cfg = GetConfig();
-        if (cfg is null)
-        {
-            logger.LogWarning("SMTP not configured. Skipping reminder email to {Email}.", toEmail);
-            return;
-        }
+        if (!IsConfigured()) { logger.LogWarning("Resend not configured. Skipping reminder email to {Email}.", toEmail); return; }
         var es = language != "en";
-        var subject = es ? $"¡Recuerda: mañana es {eventTitle}!" : $"Reminder: {eventTitle} is tomorrow!";
-        var body = BuildReminderBody(toName, eventTitle, scheduledAt, meetingUrl, es);
-        await SendAsync(cfg, toEmail, toName, subject, body, ct);
+        await SendAsync(toEmail, es ? $"¡Recuerda: mañana es {eventTitle}!" : $"Reminder: {eventTitle} is tomorrow!",
+            BuildReminderBody(toName, eventTitle, scheduledAt, meetingUrl, es), ct);
     }
 
     public async Task SendTestAsync(string toEmail, string toName, string language, CancellationToken ct)
     {
-        var cfg = GetConfig() ?? throw new InvalidOperationException("SMTP no configurado: Smtp__Host no tiene valor.");
+        if (!IsConfigured()) throw new InvalidOperationException("Resend no configurado: añade la variable Resend__ApiKey al backend.");
         var es = language != "en";
-        var subject = es ? "Correo de prueba – Diana in Motion" : "Test email – Diana in Motion";
         var fakeDate = DateTime.UtcNow.AddDays(7);
-        const string fakeTitle = "Getting Started with Diana in Motion";
-        const string fakeMeeting = "https://zoom.us/j/123456789";
-        var body = BuildConfirmationBody(toName, fakeTitle, fakeDate, fakeMeeting, es);
-        await SendAsync(cfg, toEmail, toName, subject, body, ct, throwOnError: true);
+        await SendAsync(toEmail,
+            es ? "Correo de prueba – Diana in Motion" : "Test email – Diana in Motion",
+            BuildConfirmationBody(toName, "Getting Started with Diana in Motion", fakeDate, "https://zoom.us/j/123456789", es),
+            ct);
     }
 
-    private async Task SendAsync(SmtpConfig cfg, string toEmail, string toName, string subject, string htmlBody, CancellationToken ct, bool throwOnError = false)
+    private async Task SendAsync(string toEmail, string subject, string htmlBody, CancellationToken ct)
     {
-        var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(cfg.FromName, cfg.FromEmail));
-        message.To.Add(new MailboxAddress(toName, toEmail));
-        message.Subject = subject;
-        message.Body = new BodyBuilder { HtmlBody = htmlBody }.ToMessageBody();
-
-        using var client = new SmtpClient { Timeout = 15000 };
+        var msg = new EmailMessage { From = FromAddress, Subject = subject, HtmlBody = htmlBody };
+        msg.To.Add(toEmail);
         try
         {
-            await client.ConnectAsync(cfg.Host, cfg.Port, SecureSocketOptions.Auto, ct);
-            if (!string.IsNullOrEmpty(cfg.Username))
-                await client.AuthenticateAsync(cfg.Username, cfg.Password, ct);
-            await client.SendAsync(message, ct);
-            await client.DisconnectAsync(true, ct);
+            await resend.EmailSendAsync(msg, ct);
             logger.LogInformation("Email sent to {Email}: {Subject}", toEmail, subject);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             logger.LogError(ex, "Failed to send email to {Email}: {Subject}", toEmail, subject);
-            if (throwOnError) throw;
+            throw;
         }
     }
 

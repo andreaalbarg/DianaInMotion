@@ -5,7 +5,6 @@ namespace dianainmotion.Backend.Services;
 
 public class ReminderBackgroundService(
     IServiceScopeFactory scopeFactory,
-    IEmailService emailService,
     ILogger<ReminderBackgroundService> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken ct)
@@ -28,6 +27,7 @@ public class ReminderBackgroundService(
 
         using var scope = scopeFactory.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDb>();
+        var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
 
         var pending = await db.Registrations
             .Include(r => r.Event)

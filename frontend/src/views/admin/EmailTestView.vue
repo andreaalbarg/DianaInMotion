@@ -79,7 +79,7 @@ async function send() {
       </div>
 
       <p v-if="!result" class="text-xs text-gray-400">
-        Si ves un error de "SMTP not configured", añade las variables <code class="bg-gray-100 px-1 rounded">Smtp__Host</code>, <code class="bg-gray-100 px-1 rounded">Smtp__Username</code> y <code class="bg-gray-100 px-1 rounded">Smtp__Password</code> en el entorno del backend.
+        Requiere una cuenta en <strong>resend.com</strong>. Añade la variable <code class="bg-gray-100 px-1 rounded">Resend__ApiKey</code> al entorno del backend con tu API key.
       </p>
     </div>
   </div>
