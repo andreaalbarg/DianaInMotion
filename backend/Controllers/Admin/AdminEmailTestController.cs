@@ -16,6 +16,12 @@ public class AdminEmailTestController(IEmailService emailService) : ControllerBa
         if (string.IsNullOrWhiteSpace(req.To) || !req.To.Contains('@'))
             return BadRequest(new ProblemDetails { Title = "Ingresa un correo válido." });
 
+        if (!emailService.IsConfigured())
+            return BadRequest(new ProblemDetails
+            {
+                Title = "SMTP no configurado. Añade las variables Smtp__Host, Smtp__Username y Smtp__Password en el entorno del backend."
+            });
+
         var language = req.Language == "en" ? "en" : "es";
         var fakeDate = DateTime.UtcNow.AddDays(7);
         const string fakeTitle = "Getting Started with Diana in Motion";
@@ -23,7 +29,7 @@ public class AdminEmailTestController(IEmailService emailService) : ControllerBa
 
         await emailService.SendConfirmationAsync(req.To, req.Name ?? req.To, fakeTitle, fakeDate, fakeMeeting, language, ct);
 
-        return Ok(new { message = $"Correo de prueba enviado a {req.To}." });
+        return Ok(new { message = $"Correo de prueba enviado a {req.To}. Revisa tu bandeja de entrada (y spam)." });
     }
 }
 

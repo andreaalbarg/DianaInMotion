@@ -6,6 +6,7 @@ namespace dianainmotion.Backend.Services;
 
 public interface IEmailService
 {
+    bool IsConfigured();
     Task SendConfirmationAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct);
     Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct);
 }
@@ -13,6 +14,8 @@ public interface IEmailService
 public class EmailService(IConfiguration config, ILogger<EmailService> logger) : IEmailService
 {
     private record SmtpConfig(string Host, int Port, string Username, string Password, string FromEmail, string FromName);
+
+    public bool IsConfigured() => !string.IsNullOrWhiteSpace(config["Smtp:Host"]);
 
     private SmtpConfig? GetConfig()
     {
