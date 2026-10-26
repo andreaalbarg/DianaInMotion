@@ -9,6 +9,8 @@ public interface IEmailService
     bool IsConfigured();
     Task SendConfirmationAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct);
     Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct);
+    /// <summary>Sends a test email and throws on failure so the caller can surface the error.</summary>
+    Task SendTestAsync(string toEmail, string toName, string language, CancellationToken ct);
 }
 
 public class EmailService(IConfiguration config, ILogger<EmailService> logger) : IEmailService
@@ -59,7 +61,19 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
         await SendAsync(cfg, toEmail, toName, subject, body, ct);
     }
 
-    private async Task SendAsync(SmtpConfig cfg, string toEmail, string toName, string subject, string htmlBody, CancellationToken ct)
+    public async Task SendTestAsync(string toEmail, string toName, string language, CancellationToken ct)
+    {
+        var cfg = GetConfig() ?? throw new InvalidOperationException("SMTP no configurado: Smtp__Host no tiene valor.");
+        var es = language != "en";
+        var subject = es ? "Correo de prueba – Diana in Motion" : "Test email – Diana in Motion";
+        var fakeDate = DateTime.UtcNow.AddDays(7);
+        const string fakeTitle = "Getting Started with Diana in Motion";
+        const string fakeMeeting = "https://zoom.us/j/123456789";
+        var body = BuildConfirmationBody(toName, fakeTitle, fakeDate, fakeMeeting, es);
+        await SendAsync(cfg, toEmail, toName, subject, body, ct, throwOnError: true);
+    }
+
+    private async Task SendAsync(SmtpConfig cfg, string toEmail, string toName, string subject, string htmlBody, CancellationToken ct, bool throwOnError = false)
     {
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(cfg.FromName, cfg.FromEmail));
@@ -80,6 +94,7 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             logger.LogError(ex, "Failed to send email to {Email}: {Subject}", toEmail, subject);
+            if (throwOnError) throw;
         }
     }
 

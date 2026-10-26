@@ -26,14 +26,21 @@ public class AdminEmailTestController(IEmailService emailService, IConfiguration
         }
 
         var language = req.Language == "en" ? "en" : "es";
-        var fakeDate = DateTime.UtcNow.AddDays(7);
-        const string fakeTitle = "Getting Started with Diana in Motion";
-        const string fakeMeeting = "https://zoom.us/j/123456789";
-
-        // Fire-and-forget — SMTP puede tardar varios segundos en conectar
-        _ = emailService.SendConfirmationAsync(req.To, req.Name ?? req.To, fakeTitle, fakeDate, fakeMeeting, language, CancellationToken.None);
-
-        return Ok(new { message = $"Solicitud enviada a {req.To}. Revisa tu bandeja en 1-2 minutos (incluyendo spam)." });
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, timeout.Token);
+        try
+        {
+            await emailService.SendTestAsync(req.To, req.Name ?? req.To, language, linked.Token);
+            return Ok(new { message = $"✓ Correo enviado a {req.To}. Revisa tu bandeja (incluyendo spam)." });
+        }
+        catch (OperationCanceledException)
+        {
+            return StatusCode(504, new ProblemDetails { Title = "El servidor SMTP no respondió en 30 segundos. Verifica host y puerto." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new ProblemDetails { Title = $"Error SMTP: {ex.Message}" });
+        }
     }
 }
 

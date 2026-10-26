@@ -16,7 +16,7 @@ async function send() {
       to: to.value,
       name: name.value || to.value,
       language: language.value,
-    })
+    }, { timeout: 35000 })
     result.value = { ok: true, message: data.message }
   } catch (e: any) {
     result.value = {
@@ -69,7 +69,7 @@ async function send() {
         :disabled="!to || sending"
         class="w-full bg-[#c2f33d] text-[#231f20] font-black py-3 rounded-lg hover:bg-[#d4ff4a] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        {{ sending ? 'Enviando…' : 'Enviar correo de prueba' }}
+        {{ sending ? 'Conectando al servidor de correo…' : 'Enviar correo de prueba' }}
       </button>
 
       <div v-if="result" class="rounded-lg px-4 py-3 text-sm font-medium"
