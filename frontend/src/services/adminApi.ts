@@ -26,6 +26,7 @@ export interface AdminEvent {
   description: string
   category: string
   language: string
+  timezone: string
   scheduledAt: string
   speaker: string | null
   speakerPhotoUrl: string | null
@@ -41,6 +42,7 @@ export interface EventWriteRequest {
   description: string
   category: string
   language: string
+  timezone: string
   scheduledAt: string
   speaker?: string
   speakerPhotoUrl?: string

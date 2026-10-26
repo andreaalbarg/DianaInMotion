@@ -58,8 +58,11 @@ const monthEvents = computed(() =>
   })
 )
 
-function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })
+function formatTime(iso: string, tz: string) {
+  return new Date(iso).toLocaleTimeString('en-US', {
+    hour: '2-digit', minute: '2-digit',
+    timeZone: tz || 'UTC', timeZoneName: 'short',
+  })
 }
 
 function initials(name: string) {
@@ -147,7 +150,7 @@ function initials(name: string) {
         <!-- Event info -->
         <div class="flex-1 min-w-0">
           <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-2">
-            {{ event.category === 'basics' ? 'Basics' : 'Advanced' }} · {{ formatTime(event.scheduledAt) }} UTC
+            {{ event.category === 'basics' ? 'Basics' : 'Advanced' }} · {{ formatTime(event.scheduledAt, event.timezone) }}
             <span class="ml-1 px-1.5 py-0.5 border text-[10px]"
               :class="event.language === 'en' ? 'border-blue-200 text-blue-500' : 'border-orange-200 text-orange-500'">
               {{ event.language === 'en' ? 'EN' : 'ES' }}

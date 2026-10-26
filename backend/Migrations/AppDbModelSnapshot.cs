@@ -70,6 +70,10 @@ namespace dianainmotion.Backend.Migrations
                     b.Property<string>("SpeakerPhotoUrl")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Timezone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -89,6 +93,7 @@ namespace dianainmotion.Backend.Migrations
                             Language = "es",
                             ScheduledAt = new DateTime(2026, 11, 5, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
+                            Timezone = "UTC",
                             Title = "Getting Started with Diana"
                         },
                         new
@@ -101,6 +106,7 @@ namespace dianainmotion.Backend.Migrations
                             Language = "es",
                             ScheduledAt = new DateTime(2026, 11, 12, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
+                            Timezone = "UTC",
                             Title = "Building Your First Full-Stack App"
                         },
                         new
@@ -113,6 +119,7 @@ namespace dianainmotion.Backend.Migrations
                             Language = "es",
                             ScheduledAt = new DateTime(2026, 11, 19, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
+                            Timezone = "UTC",
                             Title = "Integrations & External APIs"
                         },
                         new
@@ -126,6 +133,7 @@ namespace dianainmotion.Backend.Migrations
                             RecordingUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                             ScheduledAt = new DateTime(2026, 9, 17, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
+                            Timezone = "UTC",
                             Title = "Intro to Diana: What Can You Build?"
                         },
                         new
@@ -139,6 +147,7 @@ namespace dianainmotion.Backend.Migrations
                             RecordingUrl = "https://www.youtube.com/watch?v=jNQXAC9IVRw",
                             ScheduledAt = new DateTime(2026, 10, 1, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
+                            Timezone = "UTC",
                             Title = "Working with Databases in Diana"
                         },
                         new
@@ -152,6 +161,7 @@ namespace dianainmotion.Backend.Migrations
                             RecordingUrl = "https://www.youtube.com/watch?v=9bZkp7q19f0",
                             ScheduledAt = new DateTime(2026, 10, 15, 18, 0, 0, 0, DateTimeKind.Utc),
                             Speaker = "Diana Team",
+                            Timezone = "UTC",
                             Title = "Deploying & Shipping Your Diana App"
                         });
                 });

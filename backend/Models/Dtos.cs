@@ -7,6 +7,7 @@ public record EventDto
     public string Description { get; init; } = "";
     public string Category { get; init; } = "";
     public string Language { get; init; } = "es";
+    public string Timezone { get; init; } = "UTC";
     public DateTime ScheduledAt { get; init; }
     public string? Speaker { get; init; }
     public string? SpeakerPhotoUrl { get; init; }
@@ -44,6 +45,7 @@ public record EventWriteRequest
     public required string Description { get; init; }
     public required string Category { get; init; }
     public string Language { get; init; } = "es";
+    public string Timezone { get; init; } = "UTC";
     public required DateTime ScheduledAt { get; init; }
     public string? Speaker { get; init; }
     public string? SpeakerPhotoUrl { get; init; }

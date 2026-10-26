@@ -10,4 +10,5 @@ export interface Event {
   isPast: boolean
   registrationCount: number
   language: string
+  timezone: string
 }

@@ -18,11 +18,48 @@ const showForm = ref(false)
 const editingId = ref<string | null>(null)
 const error = ref('')
 
+const TIMEZONES = [
+  { value: 'UTC',                           label: 'UTC' },
+  { value: 'America/Mexico_City',           label: 'Ciudad de México (CST)' },
+  { value: 'America/New_York',              label: 'Nueva York (EST)' },
+  { value: 'America/Chicago',               label: 'Chicago (CST)' },
+  { value: 'America/Denver',                label: 'Denver (MST)' },
+  { value: 'America/Los_Angeles',           label: 'Los Ángeles (PST)' },
+  { value: 'America/Bogota',                label: 'Bogotá (COT)' },
+  { value: 'America/Lima',                  label: 'Lima (PET)' },
+  { value: 'America/Santiago',              label: 'Santiago (CLT)' },
+  { value: 'America/Argentina/Buenos_Aires',label: 'Buenos Aires (ART)' },
+  { value: 'America/Sao_Paulo',             label: 'São Paulo (BRT)' },
+  { value: 'Europe/Madrid',                 label: 'Madrid (CET)' },
+]
+
+// Convert datetime-local string interpreted as a given timezone into UTC ISO string
+function toUtcIso(datetimeLocal: string, tz: string): string {
+  const asUtc = new Date(datetimeLocal + ':00Z')
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+  }).formatToParts(asUtc)
+  const get = (t: string) => parts.find(p => p.type === t)?.value ?? '00'
+  const tzAsUtcMs = new Date(`${get('year')}-${get('month')}-${get('day')}T${get('hour')}:${get('minute')}:${get('second')}Z`).getTime()
+  return new Date(asUtc.getTime() + (asUtc.getTime() - tzAsUtcMs)).toISOString()
+}
+
+// Convert a UTC ISO string to datetime-local format in a given timezone
+function toLocalInput(iso: string, tz: string): string {
+  const parts = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit',
+  }).format(new Date(iso))
+  return parts.replace(' ', 'T')
+}
+
 const emptyForm = (): EventWriteRequest => ({
   title: '',
   description: '',
   category: 'basics',
   language: 'es',
+  timezone: 'America/Mexico_City',
   scheduledAt: '',
   speaker: '',
   speakerPhotoUrl: '',
@@ -57,13 +94,15 @@ function openCreate() {
 }
 
 function openEdit(ev: AdminEvent) {
+  const tz = ev.timezone || 'UTC'
   form.value = {
     title: ev.title,
     description: ev.description,
     category: ev.category,
-    scheduledAt: ev.scheduledAt.slice(0, 16),
-    speaker: ev.speaker ?? '',
     language: ev.language ?? 'es',
+    timezone: tz,
+    scheduledAt: toLocalInput(ev.scheduledAt, tz),
+    speaker: ev.speaker ?? '',
     speakerPhotoUrl: ev.speakerPhotoUrl ?? '',
     recordingUrl: ev.recordingUrl ?? '',
     meetingUrl: ev.meetingUrl ?? '',
@@ -77,7 +116,7 @@ async function submit() {
   error.value = ''
   const req: EventWriteRequest = {
     ...form.value,
-    scheduledAt: new Date(form.value.scheduledAt).toISOString(),
+    scheduledAt: toUtcIso(form.value.scheduledAt, form.value.timezone),
     speaker: form.value.speaker || undefined,
     speakerPhotoUrl: form.value.speakerPhotoUrl || undefined,
     recordingUrl: form.value.recordingUrl || undefined,
@@ -211,7 +250,7 @@ onMounted(() => { if (!loading.value && events.value.length === 0 && !loadError.
             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Description *</label>
             <textarea v-model="form.description" required rows="3" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] placeholder-gray-400 focus:outline-none focus:border-[#c2f33d] transition-colors resize-none"></textarea>
           </div>
-          <div class="grid grid-cols-3 gap-4">
+          <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Category *</label>
               <select v-model="form.category" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] focus:outline-none focus:border-[#c2f33d] transition-colors">
@@ -226,9 +265,18 @@ onMounted(() => { if (!loading.value && events.value.length === 0 && !loadError.
                 <option value="en">English</option>
               </select>
             </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Zona horaria *</label>
+              <select v-model="form.timezone" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] focus:outline-none focus:border-[#c2f33d] transition-colors">
+                <option v-for="tz in TIMEZONES" :key="tz.value" :value="tz.value">{{ tz.label }}</option>
+              </select>
+            </div>
             <div>
               <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Date & Time *</label>
               <input v-model="form.scheduledAt" type="datetime-local" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] focus:outline-none focus:border-[#c2f33d] transition-colors" />
+              <p v-if="form.timezone" class="text-xs text-gray-400 mt-1">Hora en {{ TIMEZONES.find(t => t.value === form.timezone)?.label }}</p>
             </div>
           </div>
           <div>

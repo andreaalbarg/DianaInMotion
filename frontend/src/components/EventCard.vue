@@ -6,10 +6,11 @@ defineProps<{
   onRegister?: () => void
 }>()
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-US', {
+function formatDate(iso: string, tz: string) {
+  return new Date(iso).toLocaleString('en-US', {
     weekday: 'short', month: 'short', day: 'numeric',
-    hour: '2-digit', minute: '2-digit', timeZone: 'UTC'
+    hour: '2-digit', minute: '2-digit',
+    timeZone: tz || 'UTC', timeZoneName: 'short',
   })
 }
 
@@ -103,7 +104,7 @@ function youtubeId(url: string | null): string | null {
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
           <rect x="3" y="4" width="18" height="18"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
-        {{ formatDate(event.scheduledAt) }} UTC
+        {{ formatDate(event.scheduledAt, event.timezone) }}
       </div>
 
       <!-- Upcoming footer -->
