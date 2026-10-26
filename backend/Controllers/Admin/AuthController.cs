@@ -54,7 +54,7 @@ public class AuthController(
                 : !string.IsNullOrEmpty(referer) ? new Uri(referer).GetLeftPart(UriPartial.Authority)
                 : $"{Request.Scheme}://{Request.Host}";
             var link = $"{frontendBase}/admin/reset-password?token={Uri.EscapeDataString(rawToken)}";
-            await emailService.SendPasswordResetAsync(adminSettings.Email, link, ct);
+            _ = emailService.SendPasswordResetAsync(adminSettings.Email, link, CancellationToken.None);
         }
         return Ok(new { message = "Si ese correo está registrado, recibirás un enlace en los próximos minutos." });
     }

@@ -164,7 +164,7 @@ public class AdminResetTokenStore
         var token = Convert.ToBase64String(
             System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
             .Replace("+", "-").Replace("/", "_").Replace("=", "");
-        _tokenHash = BCrypt.Net.BCrypt.HashPassword(token);
+        _tokenHash = Hash(token);
         _expiresAt = DateTime.UtcNow.AddMinutes(15);
         return token;
     }
@@ -172,8 +172,16 @@ public class AdminResetTokenStore
     public bool Validate(string token)
     {
         if (_tokenHash is null || DateTime.UtcNow > _expiresAt) return false;
-        return BCrypt.Net.BCrypt.Verify(token, _tokenHash);
+        return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(
+            System.Text.Encoding.UTF8.GetBytes(Hash(token)),
+            System.Text.Encoding.UTF8.GetBytes(_tokenHash));
     }
 
     public void Consume() { _tokenHash = null; }
+
+    private static string Hash(string token)
+    {
+        var bytes = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(token));
+        return Convert.ToHexString(bytes);
+    }
 }
