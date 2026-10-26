@@ -31,7 +31,19 @@ public record SubscribeRequest
 
 public record LoginRequest
 {
+    public required string Email { get; init; }
     public required string Password { get; init; }
+}
+
+public record ForgotPasswordRequest
+{
+    public required string Email { get; init; }
+}
+
+public record ResetPasswordRequest
+{
+    public required string Token { get; init; }
+    public required string NewPassword { get; init; }
 }
 
 public record LoginResponse

@@ -7,8 +7,8 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
 
   const isAuthenticated = computed(() => !!token.value)
 
-  async function login(password: string) {
-    const t = await adminLogin(password)
+  async function login(email: string, password: string) {
+    const t = await adminLogin(email, password)
     token.value = t
     localStorage.setItem('admin_token', t)
   }

@@ -22,7 +22,11 @@ var adminPassword = builder.Configuration["Admin:Password"] is { Length: > 0 } a
     ? ap
     : LoadOrGenerateAdminPassword(dataDir);
 var adminPasswordHash = BCrypt.Net.BCrypt.HashPassword(adminPassword);
-builder.Services.AddSingleton(new AdminSettings(adminPasswordHash));
+var adminEmail = builder.Configuration["Admin:Email"] is { Length: > 0 } ae
+    ? ae
+    : "andrea@xipetechnology.com";
+builder.Services.AddSingleton(new AdminSettings(adminPasswordHash, adminEmail));
+builder.Services.AddSingleton<AdminResetTokenStore>();
 
 // JWT — auto-generate ephemeral secret if not supplied (tokens lost on restart, acceptable)
 var jwtSecret = builder.Configuration["Jwt:Secret"] is { Length: > 0 } js
@@ -143,5 +147,29 @@ static string LoadOrGenerateAdminPassword(string dataDir)
     return pw;
 }
 
-public record AdminSettings(string PasswordHash);
+public record AdminSettings(string PasswordHash, string Email);
 public record JwtSettings(string Secret);
+
+public class AdminResetTokenStore
+{
+    private string? _tokenHash;
+    private DateTime _expiresAt;
+
+    public string Generate()
+    {
+        var token = Convert.ToBase64String(
+            System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
+            .Replace("+", "-").Replace("/", "_").Replace("=", "");
+        _tokenHash = BCrypt.Net.BCrypt.HashPassword(token);
+        _expiresAt = DateTime.UtcNow.AddMinutes(15);
+        return token;
+    }
+
+    public bool Validate(string token)
+    {
+        if (_tokenHash is null || DateTime.UtcNow > _expiresAt) return false;
+        return BCrypt.Net.BCrypt.Verify(token, _tokenHash);
+    }
+
+    public void Consume() { _tokenHash = null; }
+}

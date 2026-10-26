@@ -12,6 +12,14 @@ const router = createRouter({
       component: () => import('../views/admin/AdminLogin.vue'),
     },
     {
+      path: '/admin/forgot-password',
+      component: () => import('../views/admin/ForgotPasswordView.vue'),
+    },
+    {
+      path: '/admin/reset-password',
+      component: () => import('../views/admin/ResetPasswordView.vue'),
+    },
+    {
       path: '/admin',
       component: () => import('../views/admin/AdminLayout.vue'),
       meta: { requiresAuth: true },

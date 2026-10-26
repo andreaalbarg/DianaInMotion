@@ -5,6 +5,7 @@ import { useAdminAuthStore } from '../../stores/adminAuth'
 
 const auth = useAdminAuthStore()
 const router = useRouter()
+const email = ref('')
 const password = ref('')
 const error = ref('')
 const loading = ref(false)
@@ -13,10 +14,10 @@ async function submit() {
   error.value = ''
   loading.value = true
   try {
-    await auth.login(password.value)
+    await auth.login(email.value, password.value)
     router.push('/admin/events')
   } catch {
-    error.value = 'Invalid password.'
+    error.value = 'Correo o contraseña incorrectos.'
   } finally {
     loading.value = false
   }
@@ -32,11 +33,22 @@ async function submit() {
       </div>
       <form @submit.prevent="submit" class="bg-white/5 border border-white/10 rounded-xl p-8 space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-white/60 uppercase tracking-widest mb-2">Password</label>
+          <label class="block text-xs font-semibold text-white/60 uppercase tracking-widest mb-2">Correo</label>
+          <input
+            v-model="email"
+            type="email"
+            placeholder="tu@correo.com"
+            required
+            class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#c2f33d] transition-colors"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-white/60 uppercase tracking-widest mb-2">Contraseña</label>
           <input
             v-model="password"
             type="password"
-            placeholder="Enter admin password"
+            placeholder="••••••••"
+            required
             class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#c2f33d] transition-colors"
           />
         </div>
@@ -46,8 +58,13 @@ async function submit() {
           :disabled="loading"
           class="w-full bg-[#c2f33d] text-[#231f20] font-black py-3 rounded-lg hover:bg-[#d4ff4a] transition-colors disabled:opacity-50"
         >
-          {{ loading ? 'Signing in...' : 'Sign In' }}
+          {{ loading ? 'Entrando...' : 'Entrar' }}
         </button>
+        <div class="text-center">
+          <RouterLink to="/admin/forgot-password" class="text-xs text-white/40 hover:text-white/70 transition-colors">
+            ¿Olvidaste tu contraseña?
+          </RouterLink>
+        </div>
       </form>
     </div>
   </div>

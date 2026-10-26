@@ -9,6 +9,7 @@ public interface IEmailService
     Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct);
     /// <summary>Sends a test email and throws on failure so the caller can surface the error.</summary>
     Task SendTestAsync(string toEmail, string toName, string language, CancellationToken ct);
+    Task SendPasswordResetAsync(string toEmail, string resetLink, CancellationToken ct);
 }
 
 public class EmailService(IResend resend, IConfiguration config, ILogger<EmailService> logger) : IEmailService
@@ -41,6 +42,34 @@ public class EmailService(IResend resend, IConfiguration config, ILogger<EmailSe
             es ? "Correo de prueba – Diana in Motion" : "Test email – Diana in Motion",
             BuildConfirmationBody(toName, "Getting Started with Diana in Motion", DateTime.UtcNow.AddDays(7), "https://zoom.us/j/123456789", es),
             ct);
+    }
+
+    public async Task SendPasswordResetAsync(string toEmail, string resetLink, CancellationToken ct)
+    {
+        var encoded = System.Net.WebUtility.HtmlEncode(resetLink);
+        var html = $"""
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px 16px;color:#231f20;">
+              <div style="background:#231f20;padding:24px 32px;border-radius:12px 12px 0 0;">
+                <h1 style="margin:0;font-size:22px;color:#ffffff;">Diana in Motion</h1>
+              </div>
+              <div style="border:1px solid #e5e7eb;border-top:none;padding:32px;border-radius:0 0 12px 12px;">
+                <h2 style="color:#231f20;">Recuperar contraseña</h2>
+                <p>Recibiste este correo porque solicitaste restablecer tu contraseña de administrador.</p>
+                <p>Haz clic en el botón para crear una nueva contraseña. El enlace expira en <strong>15 minutos</strong>.</p>
+                <p style="margin:32px 0;">
+                  <a href="{encoded}" style="background:#231f20;color:#c2f33d;padding:14px 28px;text-decoration:none;font-weight:bold;border-radius:8px;">
+                    Restablecer contraseña
+                  </a>
+                </p>
+                <p style="color:#666;font-size:13px;">Si no solicitaste esto, ignora este correo.</p>
+                <p style="margin-top:32px;"><strong>— Diana's Team</strong></p>
+              </div>
+            </body>
+            </html>
+            """;
+        await SendAsync(toEmail, "Restablecer contraseña – Diana in Motion", html, ct);
     }
 
     private async Task SendAsync(string toEmail, string subject, string htmlBody, CancellationToken ct)

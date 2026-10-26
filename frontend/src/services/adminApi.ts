@@ -65,9 +65,17 @@ export interface Subscriber {
   subscribedAt: string
 }
 
-export async function adminLogin(password: string): Promise<string> {
-  const { data } = await adminApi.post<{ token: string }>('/auth/login', { password })
+export async function adminLogin(email: string, password: string): Promise<string> {
+  const { data } = await adminApi.post<{ token: string }>('/auth/login', { email, password })
   return data.token
+}
+
+export async function adminForgotPassword(email: string): Promise<void> {
+  await adminApi.post('/auth/forgot-password', { email })
+}
+
+export async function adminResetPassword(token: string, newPassword: string): Promise<void> {
+  await adminApi.post('/auth/reset-password', { token, newPassword })
 }
 
 export async function fetchAdminEvents(): Promise<AdminEvent[]> {
