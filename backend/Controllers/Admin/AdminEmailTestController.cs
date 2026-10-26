@@ -8,7 +8,7 @@ namespace dianainmotion.Backend.Controllers.Admin;
 [ApiController]
 [Route("api/admin/email-test")]
 [Authorize(Roles = "Admin")]
-public class AdminEmailTestController(IEmailService emailService) : ControllerBase
+public class AdminEmailTestController(IEmailService emailService, IConfiguration config) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Send([FromBody] EmailTestRequest req, CancellationToken ct)
@@ -17,10 +17,13 @@ public class AdminEmailTestController(IEmailService emailService) : ControllerBa
             return BadRequest(new ProblemDetails { Title = "Ingresa un correo válido." });
 
         if (!emailService.IsConfigured())
-            return BadRequest(new ProblemDetails
-            {
-                Title = "SMTP no configurado. Añade las variables Smtp__Host, Smtp__Username y Smtp__Password en el entorno del backend."
-            });
+        {
+            var detected = config["Smtp:Host"];
+            var msg = string.IsNullOrWhiteSpace(detected)
+                ? "SMTP no configurado. El app no detecta ningún valor en Smtp__Host."
+                : $"SMTP no configurado correctamente. Smtp__Host detectado: '{detected}' — verifica que sea un host válido.";
+            return BadRequest(new ProblemDetails { Title = msg });
+        }
 
         var language = req.Language == "en" ? "en" : "es";
         var fakeDate = DateTime.UtcNow.AddDays(7);
