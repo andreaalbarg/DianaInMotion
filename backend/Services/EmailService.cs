@@ -1,5 +1,4 @@
-using System.Net.Http.Headers;
-using System.Text.Json;
+using Resend;
 
 namespace dianainmotion.Backend.Services;
 
@@ -12,63 +11,52 @@ public interface IEmailService
     Task SendTestAsync(string toEmail, string toName, string language, CancellationToken ct);
 }
 
-public class EmailService(IHttpClientFactory httpClientFactory, IConfiguration config, ILogger<EmailService> logger) : IEmailService
+public class EmailService(IResend resend, IConfiguration config, ILogger<EmailService> logger) : IEmailService
 {
-    private string ApiKey => config["MailerDash:ApiKey"] ?? "";
-    private string FromEmail => config["MailerDash:FromEmail"] is { Length: > 0 } f ? f : "noreply@dianainmotion.com";
-    private string FromName => config["MailerDash:FromName"] is { Length: > 0 } n ? n : "Diana in Motion";
+    private string FromAddress => config["Resend:From"] is { Length: > 0 } f ? f : "Diana in Motion <onboarding@resend.dev>";
 
-    public bool IsConfigured() => !string.IsNullOrWhiteSpace(ApiKey);
+    public bool IsConfigured() => !string.IsNullOrWhiteSpace(config["Resend:ApiKey"]);
 
     public async Task SendConfirmationAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct)
     {
-        if (!IsConfigured()) { logger.LogWarning("MailerDash not configured. Skipping confirmation email to {Email}.", toEmail); return; }
+        if (!IsConfigured()) { logger.LogWarning("Resend not configured. Skipping confirmation email to {Email}.", toEmail); return; }
         var es = language != "en";
-        await SendAsync(toEmail, toName, es ? $"¡Registro confirmado! – {eventTitle}" : $"Registration confirmed! – {eventTitle}",
+        await SendAsync(toEmail, es ? $"¡Registro confirmado! – {eventTitle}" : $"Registration confirmed! – {eventTitle}",
             BuildConfirmationBody(toName, eventTitle, scheduledAt, meetingUrl, es), ct);
     }
 
     public async Task SendReminderAsync(string toEmail, string toName, string eventTitle, DateTime scheduledAt, string? meetingUrl, string language, CancellationToken ct)
     {
-        if (!IsConfigured()) { logger.LogWarning("MailerDash not configured. Skipping reminder email to {Email}.", toEmail); return; }
+        if (!IsConfigured()) { logger.LogWarning("Resend not configured. Skipping reminder email to {Email}.", toEmail); return; }
         var es = language != "en";
-        await SendAsync(toEmail, toName, es ? $"¡Recuerda: mañana es {eventTitle}!" : $"Reminder: {eventTitle} is tomorrow!",
+        await SendAsync(toEmail, es ? $"¡Recuerda: mañana es {eventTitle}!" : $"Reminder: {eventTitle} is tomorrow!",
             BuildReminderBody(toName, eventTitle, scheduledAt, meetingUrl, es), ct);
     }
 
     public async Task SendTestAsync(string toEmail, string toName, string language, CancellationToken ct)
     {
-        if (!IsConfigured()) throw new InvalidOperationException("MailerDash no configurado: añade la variable MailerDash__ApiKey al backend.");
+        if (!IsConfigured()) throw new InvalidOperationException("Resend no configurado: añade la variable Resend__ApiKey al backend.");
         var es = language != "en";
-        await SendAsync(toEmail, toName,
+        await SendAsync(toEmail,
             es ? "Correo de prueba – Diana in Motion" : "Test email – Diana in Motion",
             BuildConfirmationBody(toName, "Getting Started with Diana in Motion", DateTime.UtcNow.AddDays(7), "https://zoom.us/j/123456789", es),
             ct);
     }
 
-    private async Task SendAsync(string toEmail, string toName, string subject, string htmlBody, CancellationToken ct)
+    private async Task SendAsync(string toEmail, string subject, string htmlBody, CancellationToken ct)
     {
-        var payload = new
+        var msg = new EmailMessage { From = FromAddress, Subject = subject, HtmlBody = htmlBody };
+        msg.To.Add(toEmail);
+        try
         {
-            personalizations = new[] { new { to = new[] { new { email = toEmail, name = toName } } } },
-            from = new { email = FromEmail, name = FromName },
-            subject,
-            content = new[] { new { type = "text/html", value = htmlBody } }
-        };
-
-        var client = httpClientFactory.CreateClient("mailerdash");
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ApiKey);
-        client.DefaultRequestHeaders.Add("X-Md-Channel", "trans");
-
-        var response = await client.PostAsJsonAsync("https://api.mailerdash.com/v1/mail/send", payload, ct);
-        if (!response.IsSuccessStatusCode)
-        {
-            var body = await response.Content.ReadAsStringAsync(ct);
-            var msg = $"MailerDash API error {(int)response.StatusCode}: {body}";
-            logger.LogError(msg);
-            throw new InvalidOperationException(msg);
+            await resend.EmailSendAsync(msg, ct);
+            logger.LogInformation("Email sent to {Email}: {Subject}", toEmail, subject);
         }
-        logger.LogInformation("Email sent to {Email}: {Subject}", toEmail, subject);
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            logger.LogError(ex, "Failed to send email to {Email}: {Subject}", toEmail, subject);
+            throw;
+        }
     }
 
     private static string FormatDate(DateTime dt, bool es)
