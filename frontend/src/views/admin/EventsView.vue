@@ -36,7 +36,12 @@ async function load() {
   try {
     events.value = await fetchAdminEvents()
   } catch (e: any) {
-    loadError.value = e?.response?.data?.title ?? e?.message ?? 'Error al cargar eventos.'
+    const status = e?.response?.status
+    if (status === 401) {
+      loadError.value = 'Sesión expirada. Inicia sesión de nuevo.'
+    } else {
+      loadError.value = `Error${status ? ` ${status}` : ''}: ${e?.response?.data?.title ?? e?.message ?? 'No se pudo conectar con el servidor.'}`
+    }
   } finally {
     loading.value = false
   }
@@ -132,8 +137,12 @@ onMounted(() => { if (!loading.value && events.value.length === 0 && !loadError.
 
     <div v-if="loading" class="text-white/40">Loading…</div>
 
-    <div v-else-if="loadError" class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-red-400 text-sm">
-      {{ loadError }}
+    <div v-else-if="loadError" class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-red-400 text-sm space-y-3">
+      <p>{{ loadError }}</p>
+      <div class="flex gap-3">
+        <button @click="load" class="px-4 py-1.5 bg-white/10 text-white rounded-lg text-xs hover:bg-white/20">Reintentar</button>
+        <RouterLink to="/admin/login" class="px-4 py-1.5 bg-white/10 text-white rounded-lg text-xs hover:bg-white/20">Ir a login</RouterLink>
+      </div>
     </div>
 
     <div v-else class="bg-white/5 border border-white/10 rounded-xl overflow-hidden">

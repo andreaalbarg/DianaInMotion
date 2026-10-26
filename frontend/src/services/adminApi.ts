@@ -8,13 +8,11 @@ adminApi.interceptors.request.use(config => {
   return config
 })
 
-// On 401 clear token and redirect to login
 adminApi.interceptors.response.use(
   res => res,
   err => {
     if (err?.response?.status === 401) {
       localStorage.removeItem('admin_token')
-      window.location.href = '/admin/login'
     }
     return Promise.reject(err)
   }
