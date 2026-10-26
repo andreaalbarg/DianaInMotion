@@ -1,8 +1,10 @@
 import axios from 'axios'
+import { apiBase } from './config'
 
-const adminApi = axios.create({ baseURL: '/api/admin', timeout: 15000 })
+const adminApi = axios.create({ timeout: 15000 })
 
 adminApi.interceptors.request.use(config => {
+  config.baseURL = apiBase('/api/admin')
   const token = localStorage.getItem('admin_token')
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config

@@ -1,6 +1,11 @@
 import axios from 'axios'
+import { apiBase } from './config'
 
-const api = axios.create({ baseURL: '/api' })
+const api = axios.create()
+api.interceptors.request.use(config => {
+  config.baseURL = apiBase('/api')
+  return config
+})
 
 export async function fetchUpcomingEvents() {
   const { data } = await api.get<import('../types').Event[]>('/events/upcoming')

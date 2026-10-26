@@ -89,14 +89,26 @@ if (!string.IsNullOrEmpty(pathBase)) app.UsePathBase(pathBase);
 using (var scope = app.Services.CreateScope())
     scope.ServiceProvider.GetRequiredService<AppDb>().Database.Migrate();
 
-// Write our port to a discovery file so the Vite dev proxy can find us.
-// Diana passes --urls as a CLI arg which takes precedence over ASPNETCORE_URLS;
-// read app.Configuration["urls"] (which maps --urls) first, then fall back.
+// Determine our public URL and write it so the frontend can use it directly.
+// Diana passes --urls as a CLI arg; app.Configuration["urls"] captures that.
 var boundUrls = app.Configuration["urls"]
     ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
     ?? "";
 if (!string.IsNullOrEmpty(boundUrls) && Uri.TryCreate(boundUrls.Split(';')[0].Trim(), UriKind.Absolute, out var listenUri))
+{
+    // Proxy discovery file (for Vite proxy)
     File.WriteAllText(Path.Combine(Path.GetTempPath(), "diana_dianainmotion_backend"), $"http://localhost:{listenUri.Port}");
+
+    // Public URL file (for browser-side direct calls, bypasses Vite proxy entirely)
+    var pattern = Environment.GetEnvironmentVariable("PreviewSubdomainPattern") ?? "";
+    var publicUrl = string.IsNullOrEmpty(pattern) ? "" : pattern.Replace("{port}", listenUri.Port.ToString());
+    var workspaceRoot = Path.GetDirectoryName(builder.Environment.ContentRootPath) ?? "";
+    var frontendPublic = Path.Combine(workspaceRoot, "frontend", "public");
+    if (!string.IsNullOrEmpty(publicUrl) && Directory.Exists(frontendPublic))
+        File.WriteAllText(
+            Path.Combine(frontendPublic, "backend-config.json"),
+            $"{{\"backendUrl\":\"{publicUrl}\"}}");
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();
