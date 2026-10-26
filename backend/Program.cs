@@ -16,17 +16,17 @@ builder.Services.AddDbContext<AppDb>(o => o
     .UseSqlite($"Data Source={dbPath}")
     .ConfigureWarnings(w => w.Log(RelationalEventId.PendingModelChangesWarning)));
 
-// Admin credentials
-var adminPassword = builder.Configuration["Admin:Password"]
-    is { Length: > 0 } ap ? ap
-    : throw new InvalidOperationException("Admin:Password not configured");
+// Admin credentials — auto-generate and persist if not supplied via env/config
+var adminPassword = builder.Configuration["Admin:Password"] is { Length: > 0 } ap
+    ? ap
+    : LoadOrGenerateAdminPassword(dataDir);
 var adminPasswordHash = BCrypt.Net.BCrypt.HashPassword(adminPassword);
 builder.Services.AddSingleton(new AdminSettings(adminPasswordHash));
 
-// JWT
-var jwtSecret = builder.Configuration["Jwt:Secret"]
-    is { Length: > 0 } js ? js
-    : throw new InvalidOperationException("Jwt:Secret not configured");
+// JWT — auto-generate ephemeral secret if not supplied (tokens lost on restart, acceptable)
+var jwtSecret = builder.Configuration["Jwt:Secret"] is { Length: > 0 } js
+    ? js
+    : Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(48));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>
     {
@@ -122,6 +122,20 @@ app.MapGet("/", () => Results.Redirect("swagger"));
 app.MapGet("/api/health", () => new { status = "ok", project = "dianainmotion" });
 
 app.Run();
+
+static string LoadOrGenerateAdminPassword(string dataDir)
+{
+    var pwFile = Path.Combine(dataDir, "admin_password.txt");
+    if (File.Exists(pwFile))
+        return File.ReadAllText(pwFile).Trim();
+
+    var pw = Convert.ToBase64String(
+        System.Security.Cryptography.RandomNumberGenerator.GetBytes(18))
+        .Replace("=", "").Replace("/", "_").Replace("+", "-");
+    File.WriteAllText(pwFile, pw);
+    Console.WriteLine($"[ADMIN] No Admin:Password configured. Auto-generated password: {pw}  (persisted to {pwFile})");
+    return pw;
+}
 
 public record AdminSettings(string PasswordHash);
 public record JwtSettings(string Secret);
