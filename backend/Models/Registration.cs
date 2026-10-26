@@ -7,6 +7,7 @@ public class Registration
     public string Name { get; set; } = "";
     public string Email { get; set; } = "";
     public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
+    public DateTime? ReminderSentAt { get; set; }
 
     public Event Event { get; set; } = null!;
 }

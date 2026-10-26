@@ -10,6 +10,7 @@ public class Event
     public string? Speaker { get; set; }
     public string? SpeakerPhotoUrl { get; set; }
     public string? RecordingUrl { get; set; }
+    public string? MeetingUrl { get; set; }
     public bool IsFeatured { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

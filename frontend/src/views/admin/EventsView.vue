@@ -26,6 +26,7 @@ const emptyForm = (): EventWriteRequest => ({
   speaker: '',
   speakerPhotoUrl: '',
   recordingUrl: '',
+  meetingUrl: '',
 })
 
 const form = ref<EventWriteRequest>(emptyForm())
@@ -63,6 +64,7 @@ function openEdit(ev: AdminEvent) {
     speaker: ev.speaker ?? '',
     speakerPhotoUrl: ev.speakerPhotoUrl ?? '',
     recordingUrl: ev.recordingUrl ?? '',
+    meetingUrl: ev.meetingUrl ?? '',
   }
   editingId.value = ev.id
   showForm.value = true
@@ -77,6 +79,7 @@ async function submit() {
     speaker: form.value.speaker || undefined,
     speakerPhotoUrl: form.value.speakerPhotoUrl || undefined,
     recordingUrl: form.value.recordingUrl || undefined,
+    meetingUrl: form.value.meetingUrl || undefined,
   }
   try {
     if (editingId.value) {
@@ -230,6 +233,10 @@ onMounted(() => { if (!loading.value && events.value.length === 0 && !loadError.
           <div>
             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">YouTube Recording URL</label>
             <input v-model="form.recordingUrl" placeholder="https://youtube.com/watch?v=..." class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] placeholder-gray-400 focus:outline-none focus:border-[#c2f33d] transition-colors" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Liga de acceso (Zoom / Meet)</label>
+            <input v-model="form.meetingUrl" placeholder="https://zoom.us/j/..." class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-[#231f20] placeholder-gray-400 focus:outline-none focus:border-[#c2f33d] transition-colors" />
           </div>
           <p v-if="error" class="text-red-500 text-sm">{{ error }}</p>
           <div class="flex gap-3 pt-2">

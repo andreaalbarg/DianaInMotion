@@ -10,6 +10,7 @@ public record EventDto
     public string? Speaker { get; init; }
     public string? SpeakerPhotoUrl { get; init; }
     public string? RecordingUrl { get; init; }
+    public string? MeetingUrl { get; init; }
     public bool IsPast { get; init; }
     public bool IsFeatured { get; init; }
     public int RegistrationCount { get; init; }
@@ -45,6 +46,7 @@ public record EventWriteRequest
     public string? Speaker { get; init; }
     public string? SpeakerPhotoUrl { get; init; }
     public string? RecordingUrl { get; init; }
+    public string? MeetingUrl { get; init; }
 }
 
 public record RegistrationDto

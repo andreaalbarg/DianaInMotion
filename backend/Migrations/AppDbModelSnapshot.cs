@@ -51,6 +51,9 @@ namespace dianainmotion.Backend.Migrations
                     b.Property<bool>("IsFeatured")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("MeetingUrl")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("RecordingUrl")
                         .HasColumnType("TEXT");
 
@@ -162,6 +165,9 @@ namespace dianainmotion.Backend.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("RegisteredAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ReminderSentAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

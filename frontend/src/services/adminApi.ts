@@ -29,6 +29,7 @@ export interface AdminEvent {
   speaker: string | null
   speakerPhotoUrl: string | null
   recordingUrl: string | null
+  meetingUrl: string | null
   isPast: boolean
   isFeatured: boolean
   registrationCount: number
@@ -42,6 +43,7 @@ export interface EventWriteRequest {
   speaker?: string
   speakerPhotoUrl?: string
   recordingUrl?: string
+  meetingUrl?: string
 }
 
 export interface Registration {

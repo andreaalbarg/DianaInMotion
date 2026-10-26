@@ -41,6 +41,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddSingleton(new JwtSettings(jwtSecret));
 
+builder.Services.AddSingleton<dianainmotion.Backend.Services.IEmailService, dianainmotion.Backend.Services.EmailService>();
+builder.Services.AddHostedService<dianainmotion.Backend.Services.ReminderBackgroundService>();
+
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient("youtube", c =>
     c.BaseAddress = new Uri("https://www.googleapis.com/youtube/v3/"));

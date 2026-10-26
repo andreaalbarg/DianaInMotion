@@ -10,7 +10,7 @@ namespace dianainmotion.Backend.Controllers;
 [ApiController]
 [Route("api/events")]
 [AllowAnonymous]
-public class EventsController(AppDb db, YouTubeService youtube) : ControllerBase
+public class EventsController(AppDb db, YouTubeService youtube, IEmailService emailService) : ControllerBase
 {
 
     [HttpGet("upcoming")]
@@ -30,6 +30,7 @@ public class EventsController(AppDb db, YouTubeService youtube) : ControllerBase
                 Speaker = e.Speaker,
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
+                MeetingUrl = e.MeetingUrl,
                 IsPast = false,
                 IsFeatured = e.IsFeatured,
                 RegistrationCount = e.Registrations.Count()
@@ -55,6 +56,7 @@ public class EventsController(AppDb db, YouTubeService youtube) : ControllerBase
                 Speaker = e.Speaker,
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
+                MeetingUrl = e.MeetingUrl,
                 IsPast = true,
                 IsFeatured = e.IsFeatured,
                 RegistrationCount = e.Registrations.Count()
@@ -86,6 +88,7 @@ public class EventsController(AppDb db, YouTubeService youtube) : ControllerBase
                 Speaker = e.Speaker,
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
+                MeetingUrl = e.MeetingUrl,
                 IsPast = true,
                 IsFeatured = true,
                 RegistrationCount = e.Registrations.Count()
@@ -114,6 +117,9 @@ public class EventsController(AppDb db, YouTubeService youtube) : ControllerBase
             RegisteredAt = DateTime.UtcNow
         });
         await db.SaveChangesAsync(ct);
+
+        _ = emailService.SendConfirmationAsync(req.Email, req.Name, ev.Title, ev.ScheduledAt, ev.MeetingUrl, ct);
+
         return Ok(new { message = "¡Registro exitoso! Te enviaremos los detalles por email." });
     }
 }

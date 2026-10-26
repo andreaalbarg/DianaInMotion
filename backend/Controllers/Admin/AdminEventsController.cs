@@ -26,6 +26,7 @@ public class AdminEventsController(AppDb db) : ControllerBase
                 Speaker = e.Speaker,
                 SpeakerPhotoUrl = e.SpeakerPhotoUrl,
                 RecordingUrl = e.RecordingUrl,
+                MeetingUrl = e.MeetingUrl,
                 IsPast = e.ScheduledAt < DateTime.UtcNow,
                 IsFeatured = e.IsFeatured,
                 RegistrationCount = e.Registrations.Count()
@@ -48,6 +49,7 @@ public class AdminEventsController(AppDb db) : ControllerBase
             Speaker = req.Speaker,
             SpeakerPhotoUrl = req.SpeakerPhotoUrl,
             RecordingUrl = req.RecordingUrl,
+            MeetingUrl = req.MeetingUrl,
             CreatedAt = DateTime.UtcNow
         };
         db.Events.Add(ev);
@@ -68,6 +70,7 @@ public class AdminEventsController(AppDb db) : ControllerBase
         ev.Speaker = req.Speaker;
         ev.SpeakerPhotoUrl = req.SpeakerPhotoUrl;
         ev.RecordingUrl = req.RecordingUrl;
+        ev.MeetingUrl = req.MeetingUrl;
 
         await db.SaveChangesAsync(ct);
         return NoContent();
