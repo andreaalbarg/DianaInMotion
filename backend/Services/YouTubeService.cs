@@ -131,8 +131,36 @@ public class YouTubeService(
         }
         uploadsPlaylistId = playlistId!;
 
-        var playlistJson = await client.GetStringAsync(
-            $"playlistItems?part=snippet&maxResults=3&playlistId={uploadsPlaylistId}&key={apiKey}", ct);
+        HttpResponseMessage playlistResp;
+        try
+        {
+            playlistResp = await client.GetAsync(
+                $"playlistItems?part=snippet&maxResults=3&playlistId={uploadsPlaylistId}&key={apiKey}", ct);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "YouTube playlistItems request failed.");
+            throw new InvalidOperationException("No se pudo obtener los videos del canal. Verifica tu conexión a Internet.");
+        }
+
+        var playlistJson = await playlistResp.Content.ReadAsStringAsync(ct);
+        if (!playlistResp.IsSuccessStatusCode)
+        {
+            var ytError = "";
+            try
+            {
+                using var errDoc = JsonDocument.Parse(playlistJson, JsonOpts);
+                ytError = errDoc.RootElement
+                    .GetProperty("error").GetProperty("message").GetString() ?? "";
+            }
+            catch { }
+            logger.LogWarning("YouTube playlistItems error {Status}: {Body}", playlistResp.StatusCode, playlistJson);
+            throw new InvalidOperationException(
+                string.IsNullOrEmpty(ytError)
+                    ? $"Error al obtener los videos (HTTP {(int)playlistResp.StatusCode}). Verifica el API Key."
+                    : $"YouTube: {ytError}");
+        }
+
         using var playlistDoc = JsonDocument.Parse(playlistJson, JsonOpts);
 
         return playlistDoc.RootElement
