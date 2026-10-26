@@ -16,6 +16,7 @@ const navItems = [
   { to: '/admin/registrations', label: 'Registrations' },
   { to: '/admin/subscribers', label: 'Subscribers' },
   { to: '/admin/youtube', label: 'YouTube' },
+  { to: '/admin/email-test', label: 'Email Test' },
 ]
 </script>
 
