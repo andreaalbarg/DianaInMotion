@@ -148,6 +148,10 @@ function initials(name: string) {
         <div class="flex-1 min-w-0">
           <p class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-2">
             {{ event.category === 'basics' ? 'Basics' : 'Advanced' }} · {{ formatTime(event.scheduledAt) }} UTC
+            <span class="ml-1 px-1.5 py-0.5 border text-[10px]"
+              :class="event.language === 'en' ? 'border-blue-200 text-blue-500' : 'border-orange-200 text-orange-500'">
+              {{ event.language === 'en' ? 'EN' : 'ES' }}
+            </span>
           </p>
           <h4 class="text-xl font-black text-[#231f20] leading-tight mb-2">{{ event.title }}</h4>
           <p class="text-sm text-gray-500 leading-relaxed mb-4">{{ event.description }}</p>
