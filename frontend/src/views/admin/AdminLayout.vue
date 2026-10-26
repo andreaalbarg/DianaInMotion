@@ -15,6 +15,7 @@ const navItems = [
   { to: '/admin/events', label: 'Events' },
   { to: '/admin/registrations', label: 'Registrations' },
   { to: '/admin/subscribers', label: 'Subscribers' },
+  { to: '/admin/youtube', label: 'YouTube' },
 ]
 </script>
 

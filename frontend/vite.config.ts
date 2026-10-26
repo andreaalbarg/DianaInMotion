@@ -1,20 +1,29 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+
+// Read backend URL from the discovery file the backend writes at startup.
+// This is more reliable than BACKEND_URL / BACKEND_PUBLIC_URL which Diana
+// may inject with a stale port from a different project's session.
+function backendTarget(): string {
+  try {
+    const url = fs.readFileSync(path.join(os.tmpdir(), 'diana_dianainmotion_backend'), 'utf-8').trim();
+    if (url) return url;
+  } catch {}
+  return process.env.BACKEND_URL || 'http://localhost:5050';
+}
 
 export default defineConfig({
   plugins: [vue()],
-  define: {
-    // Injected by Diana at spawn: browser-reachable backend URL (e.g. https://pv1234.app.sourcecoding.ai)
-    // Empty string in local dev → API clients fall back to relative /api proxy
-    __BACKEND_URL__: JSON.stringify(process.env.BACKEND_PUBLIC_URL ?? ''),
-  },
   server: {
     port: parseInt(process.env.PORT || '3000'),
     host: true,
     allowedHosts: true,
     proxy: {
       '/api': {
-        target: process.env.BACKEND_URL || 'http://localhost:5050',
+        target: backendTarget(),
         changeOrigin: true,
         secure: false,
       },

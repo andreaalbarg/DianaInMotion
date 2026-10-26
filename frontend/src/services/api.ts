@@ -1,10 +1,6 @@
 import axios from 'axios'
 
-declare const __BACKEND_URL__: string
-const _backendBase = typeof __BACKEND_URL__ !== 'undefined' && __BACKEND_URL__
-  ? __BACKEND_URL__
-  : ''
-const api = axios.create({ baseURL: `${_backendBase}/api` })
+const api = axios.create({ baseURL: '/api' })
 
 export async function fetchUpcomingEvents() {
   const { data } = await api.get<import('../types').Event[]>('/events/upcoming')

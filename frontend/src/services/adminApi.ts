@@ -1,10 +1,6 @@
 import axios from 'axios'
 
-declare const __BACKEND_URL__: string
-const _backendBase = typeof __BACKEND_URL__ !== 'undefined' && __BACKEND_URL__
-  ? __BACKEND_URL__
-  : ''
-const adminApi = axios.create({ baseURL: `${_backendBase}/api/admin`, timeout: 15000 })
+const adminApi = axios.create({ baseURL: '/api/admin', timeout: 15000 })
 
 adminApi.interceptors.request.use(config => {
   const token = localStorage.getItem('admin_token')
@@ -102,4 +98,30 @@ export async function fetchSubscribers(): Promise<Subscriber[]> {
 
 export async function deleteSubscriber(id: string): Promise<void> {
   await adminApi.delete(`/subscribers/${id}`)
+}
+
+export interface YouTubeSettings {
+  apiKey: string
+  channelId: string
+}
+
+export interface YouTubeVideoPreview {
+  videoId: string
+  title: string
+  thumbnailUrl: string
+  url: string
+}
+
+export async function fetchYouTubeSettings(): Promise<YouTubeSettings> {
+  const { data } = await adminApi.get<YouTubeSettings>('/youtube')
+  return data
+}
+
+export async function saveYouTubeSettings(settings: YouTubeSettings): Promise<void> {
+  await adminApi.put('/youtube', settings)
+}
+
+export async function previewYouTubeVideos(): Promise<YouTubeVideoPreview[]> {
+  const { data } = await adminApi.get<YouTubeVideoPreview[]>('/youtube/preview')
+  return data
 }

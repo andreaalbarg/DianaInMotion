@@ -11,6 +11,7 @@ public class AppDb : DbContext
     public DbSet<Event> Events => Set<Event>();
     public DbSet<Registration> Registrations => Set<Registration>();
     public DbSet<Subscriber> Subscribers => Set<Subscriber>();
+    public DbSet<AppSetting> AppSettings => Set<AppSetting>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder b)
     {
@@ -20,6 +21,8 @@ public class AppDb : DbContext
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
+        mb.Entity<AppSetting>().HasKey(s => s.Key);
+
         mb.Entity<Registration>()
             .HasOne(r => r.Event)
             .WithMany(e => e.Registrations)

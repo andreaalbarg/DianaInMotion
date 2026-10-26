@@ -63,3 +63,23 @@ public record SubscriberDto
     public string Email { get; init; } = "";
     public DateTime SubscribedAt { get; init; }
 }
+
+public record YouTubeSettingsDto
+{
+    public string ApiKey { get; init; } = "";
+    public string ChannelId { get; init; } = "";
+}
+
+public record YouTubeSettingsWriteRequest
+{
+    public required string ApiKey { get; init; }
+    public required string ChannelId { get; init; }
+}
+
+public record YouTubeVideoPreview
+{
+    public string VideoId { get; init; } = "";
+    public string Title { get; init; } = "";
+    public string ThumbnailUrl { get; init; } = "";
+    public string Url { get; init; } = "";
+}

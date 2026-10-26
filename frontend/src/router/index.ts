@@ -20,6 +20,7 @@ const router = createRouter({
         { path: 'events', component: () => import('../views/admin/EventsView.vue') },
         { path: 'registrations', component: () => import('../views/admin/RegistrationsView.vue') },
         { path: 'subscribers', component: () => import('../views/admin/SubscribersView.vue') },
+        { path: 'youtube', component: () => import('../views/admin/YouTubeView.vue') },
       ],
     },
   ],
