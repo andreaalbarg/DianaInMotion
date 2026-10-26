@@ -45,8 +45,13 @@ public class AuthController(
             && emailService.IsConfigured())
         {
             var rawToken = tokenStore.Generate();
+            // Use the Origin header (sent by browser) so the link points to the frontend, not the backend
+            var origin = Request.Headers.Origin.ToString();
+            var referer = Request.Headers.Referer.ToString();
             var frontendBase = config["FrontendUrl"] is { Length: > 0 } fb
                 ? fb
+                : !string.IsNullOrEmpty(origin) ? origin
+                : !string.IsNullOrEmpty(referer) ? new Uri(referer).GetLeftPart(UriPartial.Authority)
                 : $"{Request.Scheme}://{Request.Host}";
             var link = $"{frontendBase}/admin/reset-password?token={Uri.EscapeDataString(rawToken)}";
             await emailService.SendPasswordResetAsync(adminSettings.Email, link, ct);
