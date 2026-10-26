@@ -114,7 +114,7 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
         var footer      = es ? "Si tienes alguna pregunta, responde a este correo."
                              : "If you have any questions, reply to this email.";
         var closing     = es ? "¡Nos vemos ahí!" : "See you there!";
-        var team        = es ? "El equipo de Diana in Motion" : "The Diana in Motion team";
+        var team        = "Diana's Team";
 
         return $"""
             <!DOCTYPE html>
@@ -147,7 +147,7 @@ public class EmailService(IConfiguration config, ILogger<EmailService> logger) :
         var labelEvento = es ? "Evento" : "Event";
         var labelFecha  = es ? "Fecha"  : "Date";
         var closing     = es ? "¡Nos vemos mañana!" : "See you tomorrow!";
-        var team        = es ? "El equipo de Diana in Motion" : "The Diana in Motion team";
+        var team        = "Diana's Team";
 
         return $"""
             <!DOCTYPE html>
